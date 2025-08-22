@@ -18,6 +18,18 @@ export class PrestamosService {
 
   async create(createPrestamoDto: CreatePrestamoDto) {
     try {
+      // if(!createPrestamoDto.slug) {
+      //   createPrestamoDto.slug = createPrestamoDto.title
+      //      .toLowerCase()
+      //      .replaceAll(' ', '_')
+      //      .replaceAll("'", '');
+      // }else{
+      //   createPrestamoDto.slug = createPrestamoDto.slug
+      //      .toLowerCase()
+      //      .replaceAll(' ', '_')
+      //      .replaceAll("'", '');
+      // }
+
       const prestamo = this.prestamoRepository.create(createPrestamoDto);
       await this.prestamoRepository.save(prestamo);
 
