@@ -22,6 +22,7 @@ export class PrestamosService {
       await this.prestamoRepository.save(prestamo);
 
       return prestamo;
+      
     } catch (error) {
       this.handleDBExceptions(error);
     }
