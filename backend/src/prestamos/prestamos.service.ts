@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Prestamo} from './entities/prestamo.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BadRequestException, Injectable,InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
+import { PaginationDto } from 'src/common/dtos/pagination.dto';
 
 
 @Injectable()
@@ -41,9 +42,14 @@ export class PrestamosService {
 
   }
 
-  //TODO: Paginar
-  findAll() {
-    return this.prestamoRepository.find({});
+
+  findAll(paginationDto: PaginationDto) {
+    const {limit = 10, offset = 0} = paginationDto;
+    return this.prestamoRepository.find({
+      take: limit,
+      skip: offset,
+      //TODO: Relaciones
+    });
   }
 
   async findOne(id: string) {

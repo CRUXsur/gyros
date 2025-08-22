@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PrestamosModule } from './prestamos/prestamos.module';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { PrestamosModule } from './prestamos/prestamos.module';
       synchronize: true,
     }),
     PrestamosModule,
+    CommonModule,
   ],
   controllers: [AppController],
   providers: [AppService],

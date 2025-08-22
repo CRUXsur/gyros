@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, Query } from '@nestjs/common';
 import { PrestamosService } from './prestamos.service';
 import { CreatePrestamoDto } from './dto/create-prestamo.dto';
 import { UpdatePrestamoDto } from './dto/update-prestamo.dto';
+import { PaginationDto } from './../common/dtos/pagination.dto';
 
 @Controller('prestamos')
 export class PrestamosController {
@@ -13,8 +14,9 @@ export class PrestamosController {
   }
 
   @Get()
-  findAll() {
-    return this.prestamosService.findAll();
+  findAll( @Query() paginationDto: PaginationDto) {
+    // console.log(paginationDto);
+    return this.prestamosService.findAll(paginationDto);
   }
 
   @Get(':id')
