@@ -3,7 +3,7 @@ import { UpdatePrestamoDto } from './dto/update-prestamo.dto';
 import { Repository } from 'typeorm';
 import { Prestamo} from './entities/prestamo.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BadRequestException, Injectable,InternalServerErrorException, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable,InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 
 
 @Injectable()
@@ -41,20 +41,25 @@ export class PrestamosService {
 
   }
 
+  //TODO: Paginar
   findAll() {
-    return `This action returns all prestamos`;
+    return this.prestamoRepository.find({});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} prestamo`;
+  async findOne(id: string) {
+    const prestamo = await this.prestamoRepository.findOneBy({id});
+    if(!prestamo) 
+      throw new NotFoundException(`Prestamo con id ${id} no encontrado`);
+    return prestamo;
   }
 
   update(id: number, updatePrestamoDto: UpdatePrestamoDto) {
     return `This action updates a #${id} prestamo`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} prestamo`;
+  async remove(id: string) {
+    const prestamo = await this.findOne(id);
+    await this.prestamoRepository.remove(prestamo);
   }
 
 

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe } from '@nestjs/common';
 import { PrestamosService } from './prestamos.service';
 import { CreatePrestamoDto } from './dto/create-prestamo.dto';
 import { UpdatePrestamoDto } from './dto/update-prestamo.dto';
@@ -18,8 +18,8 @@ export class PrestamosController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.prestamosService.findOne(+id);
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return this.prestamosService.findOne(id);
   }
 
   @Patch(':id')
@@ -28,7 +28,7 @@ export class PrestamosController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.prestamosService.remove(+id);
+  remove(@Param('id', ParseUUIDPipe) id: string) {
+    return this.prestamosService.remove(id);
   }
 }
