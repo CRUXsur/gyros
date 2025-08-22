@@ -1,14 +1,15 @@
-import { Injectable } from '@nestjs/common';
 import { CreatePrestamoDto } from './dto/create-prestamo.dto';
 import { UpdatePrestamoDto } from './dto/update-prestamo.dto';
 import { Repository } from 'typeorm';
 import { Prestamo} from './entities/prestamo.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, Injectable,InternalServerErrorException, Logger } from '@nestjs/common';
+
 
 @Injectable()
 export class PrestamosService {
 
+  private readonly logger = new Logger('');
 
   constructor(
     @InjectRepository(Prestamo)
@@ -19,11 +20,10 @@ export class PrestamosService {
     try {
       const prestamo = this.prestamoRepository.create(createPrestamoDto);
       await this.prestamoRepository.save(prestamo);
-      
+
       return prestamo;
     } catch (error) {
-      console.log(error);
-      throw new InternalServerErrorException('Ayuda!');
+      this.handleDBExceptions(error);
     }
 
   }
@@ -43,4 +43,16 @@ export class PrestamosService {
   remove(id: number) {
     return `This action removes a #${id} prestamo`;
   }
+
+
+
+private handleDBExceptions(error: any){
+  if(error.code === '23505') 
+    throw new BadRequestException(error.detail);
+
+  this.logger.error(error);
+  // console.log(error);
+  throw new InternalServerErrorException('Ayuda!');
+}
+
 }
