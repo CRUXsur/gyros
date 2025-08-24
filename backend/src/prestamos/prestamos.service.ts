@@ -5,7 +5,7 @@ import { Prestamo} from './entities/prestamo.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BadRequestException, Injectable,InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { PaginationDto } from 'src/common/dtos/pagination.dto';
-
+import { validate as isUUID} from 'uuid';
 
 @Injectable()
 export class PrestamosService {
@@ -52,10 +52,18 @@ export class PrestamosService {
     });
   }
 
-  async findOne(id: string) {
-    const prestamo = await this.prestamoRepository.findOneBy({id});
+  async findOne(term: string) {
+    
+    let prestamo: Prestamo | null;
+    
+    if(isUUID(term)) {
+      prestamo = await this.prestamoRepository.findOneBy({id:term});
+    }else{
+      prestamo = await this.prestamoRepository.findOneBy({slug:term});
+    }
+
     if(!prestamo) 
-      throw new NotFoundException(`Prestamo con id ${id} no encontrado`);
+      throw new NotFoundException(`Prestamo con id ${term} no encontrado`);
     return prestamo;
   }
 

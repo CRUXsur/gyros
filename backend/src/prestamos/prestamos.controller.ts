@@ -19,9 +19,14 @@ export class PrestamosController {
     return this.prestamosService.findAll(paginationDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return this.prestamosService.findOne(id);
+  // @Get(':id')
+  // findOne(@Param('id', ParseUUIDPipe) id: string) {
+  //   return this.prestamosService.findOne(id);
+  // }
+
+  @Get(':term')
+  findOne(@Param('term') term: string) {
+    return this.prestamosService.findOne(term);
   }
 
   @Patch(':id')
