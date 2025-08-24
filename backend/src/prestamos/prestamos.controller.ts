@@ -30,8 +30,11 @@ export class PrestamosController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePrestamoDto: UpdatePrestamoDto) {
-    return this.prestamosService.update(+id, updatePrestamoDto);
+  update(
+    @Param('id') id: string, 
+    @Body() updatePrestamoDto: UpdatePrestamoDto
+  ) {
+    return this.prestamosService.update(id, updatePrestamoDto);
   }
 
   @Delete(':id')

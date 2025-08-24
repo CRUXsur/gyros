@@ -59,16 +59,35 @@ export class PrestamosService {
     if(isUUID(term)) {
       prestamo = await this.prestamoRepository.findOneBy({id:term});
     }else{
-      prestamo = await this.prestamoRepository.findOneBy({slug:term});
+      const queryBuilder = this.prestamoRepository.createQueryBuilder();
+      prestamo = await queryBuilder
+        .where('UPPER(title) =:title or slug =:slug', {
+          title: term.toUpperCase(),
+          slug: term.toLowerCase(),
+        }).getOne();
     }
 
     if(!prestamo) 
       throw new NotFoundException(`Prestamo con id ${term} no encontrado`);
     return prestamo;
+    
   }
 
-  update(id: number, updatePrestamoDto: UpdatePrestamoDto) {
-    return `This action updates a #${id} prestamo`;
+  async update(id: string, updatePrestamoDto: UpdatePrestamoDto) {
+    const prestamo = await this.prestamoRepository.preload({
+      id: id,
+      ...updatePrestamoDto,
+    });
+
+    if(!prestamo) throw new NotFoundException(`Prestamo con id ${id} no encontrado`);
+    
+    try {
+      await this.prestamoRepository.save (prestamo);
+      return prestamo;
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
+    // return prestamo;
   }
 
   async remove(id: string) {
