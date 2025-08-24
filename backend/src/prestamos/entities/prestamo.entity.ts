@@ -57,4 +57,10 @@ export class Prestamo {
          .replaceAll("'", '');
      }
 
+     @Column('text',{
+        array: true,
+        default: []
+     })
+     tags: string[];
+
 }
