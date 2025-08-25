@@ -26,7 +26,7 @@ export class PrestamosController {
 
   @Get(':term')
   findOne(@Param('term') term: string) {
-    return this.prestamosService.findOne(term);
+    return this.prestamosService.findOnePlain(term);
   }
 
   @Patch(':id')

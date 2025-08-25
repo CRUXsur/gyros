@@ -1,7 +1,7 @@
 import { CreatePrestamoDto } from './dto/create-prestamo.dto';
 import { UpdatePrestamoDto } from './dto/update-prestamo.dto';
-import { Repository } from 'typeorm';
-import { Prestamo} from './entities/prestamo.entity';
+import { DataSource, Repository } from 'typeorm';
+import { Prestamo,PrestamoImage} from './entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BadRequestException, Injectable,InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { PaginationDto } from 'src/common/dtos/pagination.dto';
@@ -15,11 +15,15 @@ export class PrestamosService {
   constructor(
     @InjectRepository(Prestamo)
     private readonly prestamoRepository: Repository<Prestamo>,
+    @InjectRepository(PrestamoImage)
+    private readonly prestamoImageRepository: Repository<PrestamoImage>,
+    private readonly dataSource: DataSource,
   ){}
 
   async create(createPrestamoDto: CreatePrestamoDto) {
     try {
       // if(!createPrestamoDto.slug) {
+
       //   createPrestamoDto.slug = createPrestamoDto.title
       //      .toLowerCase()
       //      .replaceAll(' ', '_')
@@ -31,10 +35,15 @@ export class PrestamosService {
       //      .replaceAll("'", '');
       // }
 
-      const prestamo = this.prestamoRepository.create(createPrestamoDto);
+      const {images = [], ...prestamoDetails} = createPrestamoDto;
+      const prestamo = this.prestamoRepository.create({
+        ...prestamoDetails,
+        images: images.map(image => this.prestamoImageRepository.create({url: image})),
+      });
       await this.prestamoRepository.save(prestamo);
 
-      return prestamo;
+      // return prestamo;
+      return {...prestamo, images: images};
       
     } catch (error) {
       this.handleDBExceptions(error);
@@ -43,13 +52,19 @@ export class PrestamosService {
   }
 
 
-  findAll(paginationDto: PaginationDto) {
+  async findAll(paginationDto: PaginationDto) {
     const {limit = 10, offset = 0} = paginationDto;
-    return this.prestamoRepository.find({
+    const prestamos = await this.prestamoRepository.find({
       take: limit,
       skip: offset,
-      //TODO: Relaciones
-    });
+      relations: {
+        images: true,
+      }
+    })
+    return prestamos.map(prestamo => ({
+      ...prestamo,
+      images: prestamo.images?.map(img => img.url),
+    }));
   }
 
   async findOne(term: string) {
@@ -64,7 +79,9 @@ export class PrestamosService {
         .where('UPPER(title) =:title or slug =:slug', {
           title: term.toUpperCase(),
           slug: term.toLowerCase(),
-        }).getOne();
+        })
+        .leftJoinAndSelect('prestamo.images', 'images')
+        .getOne();
     }
 
     if(!prestamo) 
@@ -73,21 +90,60 @@ export class PrestamosService {
     
   }
 
+
+  async findOnePlain(term: string) {
+    const {images = [], ...rest} = await this.findOne(term);
+    return {
+      ...rest,
+      images: images.map(image => image.url),
+    }
+  }
+
+  
   async update(id: string, updatePrestamoDto: UpdatePrestamoDto) {
+    const {images, ...toUpdate} = updatePrestamoDto;
     const prestamo = await this.prestamoRepository.preload({
-      id: id,
-      ...updatePrestamoDto,
+      id,...toUpdate,
     });
 
+    // const prestamo = await this.prestamoRepository.preload({
+    //   id: id,
+    //   ...updatePrestamoDto,
+    //   images: [],
+    // });
+
     if(!prestamo) throw new NotFoundException(`Prestamo con id ${id} no encontrado`);
-    
+ 
+    // Create query runner
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+
     try {
-      await this.prestamoRepository.save (prestamo);
+      if(images) {
+        await queryRunner.manager.delete(PrestamoImage, {prestamo: {id}});
+        prestamo.images = images.map(
+          image => this.prestamoImageRepository.create({url: image})
+        );
+      }else{
+        // prestamo.images
+        prestamo.images = await this.prestamoImageRepository.findBy({prestamo: {id}});
+      }
+      await queryRunner.manager.save(prestamo);
+      await queryRunner.commitTransaction();
+      await queryRunner.release();
+
       return prestamo;
+      // return this.findOnePlain(id);
+
     } catch (error) {
+      await queryRunner.rollbackTransaction();
+      await queryRunner.release();
       this.handleDBExceptions(error);
     }
-    // return prestamo;
+   
+    
   }
 
   async remove(id: string) {
@@ -105,5 +161,20 @@ private handleDBExceptions(error: any){
   // console.log(error);
   throw new InternalServerErrorException('Ayuda!');
 }
+
+
+async deleteAllPrestamos(){
+  const query = this.prestamoRepository.createQueryBuilder('prestamo');
+  try {
+    return await query
+    .delete()
+    .where({})
+    .execute();
+  } catch (error) {
+    this.handleDBExceptions(error);
+  }
+}
+
+
 
 }

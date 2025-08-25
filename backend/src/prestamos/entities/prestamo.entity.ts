@@ -1,4 +1,5 @@
-import{ BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import{ BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn, OneToMany } from "typeorm";
+import { PrestamoImage } from "./";
 
 @Entity()
 export class Prestamo {
@@ -63,4 +64,11 @@ export class Prestamo {
      })
      tags: string[];
 
+
+     @OneToMany(
+        () => PrestamoImage, 
+        (prestamoImage) => prestamoImage.prestamo,
+        { cascade: true, eager: true }
+     )
+     images?: PrestamoImage[];
 }
