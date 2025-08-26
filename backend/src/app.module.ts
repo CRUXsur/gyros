@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PrestamosModule } from './prestamos/prestamos.module';
 import { CommonModule } from './common/common.module';
 import { SeedModule } from './seed/seed.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { SeedModule } from './seed/seed.module';
     PrestamosModule,
     CommonModule,
     SeedModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
