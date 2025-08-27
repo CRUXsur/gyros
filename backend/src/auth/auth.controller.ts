@@ -9,6 +9,8 @@ import { RawHeaders, GetUser } from './decorators';
 import { IncomingHttpHeaders } from 'http';
 import { SetMetadata } from '@nestjs/common';
 import { UserRoleGuard } from './guards/user-role/user-role.guard';
+import { RoleProtected } from './decorators/role-protected.decorator';
+import { ValidRoles } from './interfaces';
 
 
 
@@ -53,7 +55,7 @@ export class AuthController {
 
 
   @Get('private2')
-  @SetMetadata('roles', ['admin', 'user'])
+  @RoleProtected(ValidRoles.superUser, ValidRoles.superAdmin, ValidRoles.admin, ValidRoles.user)
   @UseGuards(AuthGuard(), UserRoleGuard)
   privateRoute2(
     @GetUser() user: User,
