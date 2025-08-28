@@ -1,4 +1,5 @@
-import { BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Prestamo } from "../../prestamos/entities";
 
 
 @Entity('users')
@@ -30,6 +31,12 @@ export class User {
         default: ['user', 'admin', 'super-user']
     })
     roles: string[];
+
+    @OneToMany(
+        () => Prestamo,
+        (prestamo) => prestamo.user,
+    )
+    prestamo: Prestamo;
 
     @BeforeInsert()
     checkFieldsBeforeInsert() {

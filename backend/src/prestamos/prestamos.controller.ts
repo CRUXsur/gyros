@@ -4,9 +4,9 @@ import { CreatePrestamoDto } from './dto/create-prestamo.dto';
 import { UpdatePrestamoDto } from './dto/update-prestamo.dto';
 import { PaginationDto } from './../common/dtos/pagination.dto';
 
-import { Auth } from '../auth/decorators';
+import { Auth, GetUser } from '../auth/decorators';
 import { ValidRoles } from '../auth/interfaces';
-
+import { User } from '../auth/entities/user.entity'
 
 
 @Controller('prestamos')
@@ -15,9 +15,12 @@ export class PrestamosController {
   constructor(private readonly prestamosService: PrestamosService) {}
 
   @Post()
-  @Auth( ValidRoles.user )
-  create(@Body() createPrestamoDto: CreatePrestamoDto) {
-    return this.prestamosService.create(createPrestamoDto);
+  @Auth()
+  create(
+    @Body() createPrestamoDto: CreatePrestamoDto,
+    @GetUser() user: User,
+  ){  
+    return this.prestamosService.create(createPrestamoDto, user);
   }
 
   @Get()
@@ -40,10 +43,11 @@ export class PrestamosController {
   @Patch(':id')
   @Auth( ValidRoles.admin )
   update(
-    @Param('id') id: string, 
-    @Body() updatePrestamoDto: UpdatePrestamoDto
+    @Param( 'id', ParseUUIDPipe ) id: string, 
+    @Body() updatePrestamoDto: UpdatePrestamoDto,
+    @GetUser() user: User,
   ) {
-    return this.prestamosService.update(id, updatePrestamoDto);
+    return this.prestamosService.update(id, updatePrestamoDto, user);
   }
 
   @Delete(':id')

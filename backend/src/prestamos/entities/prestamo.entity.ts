@@ -1,5 +1,7 @@
-import{ BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn, OneToMany } from "typeorm";
+import{ BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn, OneToMany, ManyToOne } from "typeorm";
 import { PrestamoImage } from "./";
+import { User } from "../../auth/entities/user.entity";
+
 
 @Entity()
 export class Prestamo {
@@ -64,11 +66,20 @@ export class Prestamo {
      })
      tags: string[];
 
-
+     
      @OneToMany(
         () => PrestamoImage, 
         (prestamoImage) => prestamoImage.prestamo,
         { cascade: true, eager: true }
      )
      images?: PrestamoImage[];
+
+
+     @ManyToOne(
+      () => User,
+      (user) => user.prestamo,
+      { eager: true }
+     )
+     user: User;
+
 }
