@@ -1,7 +1,11 @@
-import { Module } from '@nestjs/common';
-import { PrestamosService } from './prestamos.service';
-import { PrestamosController } from './prestamos.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Module } from '@nestjs/common';
+
+import { AuthModule } from './../auth/auth.module';
+
+import { PrestamosController } from './prestamos.controller';
+import { PrestamosService } from './prestamos.service';
+
 import { Prestamo, PrestamoImage } from './entities';
 
 
@@ -9,7 +13,8 @@ import { Prestamo, PrestamoImage } from './entities';
   controllers: [PrestamosController],
   providers: [PrestamosService],
   imports:[
-    TypeOrmModule.forFeature([Prestamo, PrestamoImage])
+    TypeOrmModule.forFeature([Prestamo, PrestamoImage]),
+    AuthModule
   ]
 })
 export class PrestamosModule {}

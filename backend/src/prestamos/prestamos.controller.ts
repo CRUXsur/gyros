@@ -4,16 +4,24 @@ import { CreatePrestamoDto } from './dto/create-prestamo.dto';
 import { UpdatePrestamoDto } from './dto/update-prestamo.dto';
 import { PaginationDto } from './../common/dtos/pagination.dto';
 
+import { Auth } from '../auth/decorators';
+import { ValidRoles } from '../auth/interfaces';
+
+
+
 @Controller('prestamos')
+// @Auth() //centralizada toda la autenticación
 export class PrestamosController {
   constructor(private readonly prestamosService: PrestamosService) {}
 
   @Post()
+  @Auth( ValidRoles.user )
   create(@Body() createPrestamoDto: CreatePrestamoDto) {
     return this.prestamosService.create(createPrestamoDto);
   }
 
   @Get()
+  @Auth()
   findAll( @Query() paginationDto: PaginationDto) {
     // console.log(paginationDto);
     return this.prestamosService.findAll(paginationDto);
@@ -30,6 +38,7 @@ export class PrestamosController {
   }
 
   @Patch(':id')
+  @Auth( ValidRoles.admin )
   update(
     @Param('id') id: string, 
     @Body() updatePrestamoDto: UpdatePrestamoDto
@@ -38,6 +47,7 @@ export class PrestamosController {
   }
 
   @Delete(':id')
+  @Auth( ValidRoles.admin )
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.prestamosService.remove(id);
   }
