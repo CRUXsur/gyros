@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { CreateClienteDto } from './dto/create-cliente.dto';
 import { UpdateClienteDto } from './dto/update-cliente.dto';
 import { Cliente } from './entities/cliente.entity';
@@ -27,20 +27,26 @@ export class ClientesService {
     }
   }
 
+  // TODO: Agregar paginacion
   findAll() {
-    return `This action returns all clientes`;
+    return this.clienteRepository.find({});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} cliente`;
+  async findOne(id: string) {
+    const cliente = await this.clienteRepository.findOneBy({id});
+    if(!cliente) {
+      throw new NotFoundException(`Cliente con id ${id} no encontrado`);
+    }
+    return cliente;
   }
 
   update(id: number, updateClienteDto: UpdateClienteDto) {
     return `This action updates a #${id} cliente`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} cliente`;
+  async remove(id: string) {
+    const cliente = await this.findOne(id);
+    await this.clienteRepository.remove(cliente);
   }
 
 

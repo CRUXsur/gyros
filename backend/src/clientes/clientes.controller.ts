@@ -19,7 +19,7 @@ export class ClientesController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.clientesService.findOne(+id);
+    return this.clientesService.findOne(id);
   }
 
   @Patch(':id')
@@ -29,6 +29,6 @@ export class ClientesController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.clientesService.remove(+id);
+    return this.clientesService.remove(id);
   }
 }
