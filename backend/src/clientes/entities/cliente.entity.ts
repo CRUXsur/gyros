@@ -18,6 +18,11 @@ export class Cliente {
     })
     ci: string;
 
+    @Column('text',{
+        unique: true,
+    })
+    imei: string;
+    
     @Column()
     telefono: string;
 

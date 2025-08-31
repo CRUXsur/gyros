@@ -18,6 +18,10 @@ export class CreateClienteDto {
 
     @IsString()
     @MinLength(1)
+    imei: string;
+
+    @IsString()
+    @MinLength(1)
     telefono: string;
 
     @IsString()
