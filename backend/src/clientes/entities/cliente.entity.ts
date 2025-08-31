@@ -39,8 +39,11 @@ export class Cliente {
     })
     sexo: string[];
 
-    @Column()
-    estado_civil: string;
+    @Column('text',{
+        array: true,
+        default: ['soltero', 'casado', 'divorciado', 'viudo']
+    })
+    estado_civil: string[];
 
     @Column()
     ocupacion: string;
@@ -61,7 +64,7 @@ export class Cliente {
     credito: number;
 
     @Column()
-    tarjeta: number;
+    tarjeta: string;
 
     @Column('bool', {
         default: true,
