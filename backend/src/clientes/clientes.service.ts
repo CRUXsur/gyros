@@ -4,6 +4,7 @@ import { UpdateClienteDto } from './dto/update-cliente.dto';
 import { Cliente } from './entities/cliente.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { validate as isUUID } from 'uuid';
 
 
 @Injectable()
@@ -32,10 +33,19 @@ export class ClientesService {
     return this.clienteRepository.find({});
   }
 
-  async findOne(id: string) {
-    const cliente = await this.clienteRepository.findOneBy({id});
+  async findOne(term: string) {
+
+    let cliente: Cliente | null;
+
+    if(isUUID(term)) {
+      cliente = await this.clienteRepository.findOneBy({id:term});
+    }else{
+      cliente = await this.clienteRepository.findOneBy({ci:term});
+    }
+
+    // const cliente = await this.clienteRepository.findOneBy({id});
     if(!cliente) {
-      throw new NotFoundException(`Cliente con id ${id} no encontrado`);
+      throw new NotFoundException(`Cliente con id ${term} no encontrado`);
     }
     return cliente;
   }
