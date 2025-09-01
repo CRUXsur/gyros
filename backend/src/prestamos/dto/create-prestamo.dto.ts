@@ -5,40 +5,65 @@ import { IsString, MinLength, IsNumber, IsPositive,
 
 
 export class CreatePrestamoDto {
-    
-    @IsString()
-    @MinLength(1)
-    title: string;
 
     @IsNumber()
     @IsPositive()
     @IsOptional()
-    price?: number;
-    
-    @IsString()
-    @IsOptional()
-    description?: string;
-    
-    @IsString()
-    @IsOptional()
-    slug?: string;
-    
+    monto?: number;
+
     @IsInt()
     @IsPositive()
     @IsOptional()
-    stock?: number;
+    nocuotas?: number;
 
-    @IsString({ each: true })
-    @IsArray()
-    sizes: string[];
-
-    @IsIn(['men', 'women', 'kid', 'unisex'])
-    gender: string;
-
-    @IsString({ each: true })
-    @IsArray()
+    @IsNumber()
+    @IsPositive()
     @IsOptional()
-    tags?: string[];
+    capital?: number;
+
+    @IsNumber()
+    @IsPositive()
+    @IsOptional()
+    interes?: number;
+
+    @IsNumber()
+    @IsPositive()
+    @IsOptional()
+    saldo?: number;
+    
+    // @IsString()
+    // @MinLength(1)
+    // title: string;
+
+    // @IsNumber()
+    // @IsPositive()
+    // @IsOptional()
+    // price?: number;
+    
+    // @IsString()
+    // @IsOptional()
+    // description?: string;
+    
+    // @IsString()
+    // @IsOptional()
+    // slug?: string;
+    
+    // @IsInt()
+    // @IsPositive()
+    // @IsOptional()
+    // stock?: number;
+
+    // @IsString({ each: true })
+    // @IsArray()
+    // sizes: string[];
+
+    // @IsIn(['men', 'women', 'kid', 'unisex'])
+    // gender: string;
+
+    // @IsString({ each: true })
+    // @IsArray()
+    // @IsOptional()
+    // tags?: string[];
 
     @IsString({ each: true })
     @IsArray()
