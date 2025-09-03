@@ -1,0 +1,41 @@
+{
+  "logging": {
+    "level": "INFO",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    "file_enabled": true,
+    "console_enabled": true,
+    "log_directory": "logs"
+  },
+  "device_detection": {
+    "scan_interval": 2,
+    "timeout": 10,
+    "retry_attempts": 3
+  },
+  "adb": {
+    "command_timeout": 5,
+    "service_call_command": "service call iphonesubinfo 1",
+    "alternative_commands": [
+      "service call iphonesubinfo 3",
+      "dumpsys iphonesubinfo"
+    ]
+  },
+  "serial": {
+    "baudrate": 115200,
+    "timeout": 1,
+    "at_commands": [
+      "AT+CGSN",
+      "AT+GSN",
+      "AT+CIMI"
+    ],
+    "common_ports": [
+      "COM1", "COM2", "COM3", "COM4", "COM5",
+      "/dev/ttyUSB0", "/dev/ttyUSB1", "/dev/ttyACM0", "/dev/ttyACM1",
+      "/dev/cu.usbmodem*", "/dev/cu.usbserial*"
+    ]
+  },
+  "output": {
+    "console_log_style": true,
+    "show_timestamp": true,
+    "show_device_info": true
+  }
+}

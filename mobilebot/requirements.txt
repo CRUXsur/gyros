@@ -1,0 +1,23 @@
+# Core dependencies
+pyserial==3.5
+pyusb==1.2.1
+psutil==5.9.8
+
+# ADB integration
+adb-shell==0.4.4
+
+# USB device detection
+usbinfo==1.1.2
+
+# Logging and configuration
+colorlog==6.8.2
+pyyaml==6.0.1
+
+# Development dependencies
+pytest==7.4.4
+pytest-cov==4.1.0
+black==23.12.1
+flake8==7.0.0
+
+# Packaging
+pyinstaller==6.3.0
