@@ -1,0 +1,27 @@
+2025-09-02 19:42:54 - IMEIReader - INFO - Initialized IMEIReader with 2 methods
+2025-09-02 19:42:54 - IMEIReader - INFO - IMEIReader cleanup completed
+2025-09-02 19:43:09 - IMEIReader - INFO - Initialized IMEIReader with 2 methods
+2025-09-02 19:43:09 - IMEIReader - INFO - IMEIReader cleanup completed
+2025-09-02 19:43:33 - IMEIReader - INFO - Initialized IMEIReader with 2 methods
+2025-09-02 19:43:33 - IMEIReader - INFO - Starting automatic IMEI reading...
+2025-09-02 19:43:33 - IMEIReader - INFO - Reading IMEI from device: DeviceInfo(type=android, info={'device_id': 'NBA34BOAC5036471', 'status': 'device', 'adb_path': 'adb', 'details': 'usb:2-1 product:P963F94 model:ZTE_Blade_A34 device:P963F94 transport_id:5'})
+2025-09-02 19:43:33 - IMEIReader - INFO - Trying method: ADBMethod
+2025-09-02 19:43:33 - IMEIReader - WARNING - Method ADBMethod failed: All ADB commands failed to retrieve IMEI
+2025-09-02 19:43:33 - IMEIReader - INFO - IMEIReader cleanup completed
+2025-09-02 19:43:44 - IMEIReader - INFO - Initialized IMEIReader with 2 methods
+2025-09-02 19:43:44 - IMEIReader - INFO - Starting automatic IMEI reading...
+2025-09-02 19:43:44 - IMEIReader - INFO - Reading IMEI from device: DeviceInfo(type=android, info={'device_id': 'NBA34BOAC5036471', 'status': 'device', 'adb_path': 'adb', 'details': 'usb:2-1 product:P963F94 model:ZTE_Blade_A34 device:P963F94 transport_id:5'})
+2025-09-02 19:43:44 - IMEIReader - INFO - Trying method: ADBMethod
+2025-09-02 19:43:44 - IMEIReader - WARNING - Method ADBMethod failed: All ADB commands failed to retrieve IMEI
+2025-09-02 19:43:44 - IMEIReader - INFO - IMEIReader cleanup completed
+2025-09-02 19:44:40 - IMEIReader - INFO - Initialized IMEIReader with 2 methods
+2025-09-02 19:44:40 - IMEIReader - INFO - Initialized IMEIReader with 2 methods
+2025-09-02 19:44:40 - IMEIReader - INFO - IMEIReader cleanup completed
+2025-09-02 19:50:15 - IMEIReader - INFO - Initialized IMEIReader with 2 methods
+2025-09-02 19:50:15 - IMEIReader - INFO - IMEIReader cleanup completed
+2025-09-02 19:50:48 - IMEIReader - INFO - Initialized IMEIReader with 2 methods
+2025-09-02 19:50:48 - IMEIReader - INFO - Starting automatic IMEI reading...
+2025-09-02 19:50:48 - IMEIReader - INFO - Reading IMEI from device: DeviceInfo(type=android, info={'device_id': 'NBA34BOAC5036471', 'status': 'device', 'adb_path': 'adb', 'details': 'usb:2-1 product:P963F94 model:ZTE_Blade_A34 device:P963F94 transport_id:5'})
+2025-09-02 19:50:48 - IMEIReader - INFO - Trying method: ADBMethod
+2025-09-02 19:50:48 - IMEIReader - WARNING - Method ADBMethod failed: All ADB commands failed to retrieve IMEI
+2025-09-02 19:50:48 - IMEIReader - INFO - IMEIReader cleanup completed
