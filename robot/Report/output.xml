@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.1 (Python 3.12.6 on darwin)" generated="2025-09-04T15:21:00.356049" rpa="false" schemaversion="5">
+<suite id="s1" name="Add Note Test" source="/Users/mark/Desktop/WorkSpace/gyros/robot/Test/Add_Note_Test.robot">
+<kw name="BeforeSuite" owner="BaseTest" type="SETUP">
+<kw name="Start Appium Server" owner="AppiumManager">
+<msg time="2025-09-04T15:21:05.427720" level="INFO">Starting Appium Server with args : -p 4723</msg>
+<arg>${APPIUM-PORT}</arg>
+<status status="PASS" start="2025-09-04T15:21:00.421778" elapsed="5.006214"/>
+</kw>
+<kw name="Open Google Keep Note App" owner="AppHelper">
+<kw name="Open Application" owner="AppiumLibrary">
+<arg>http://localhost:${APPIUM-PORT}</arg>
+<arg>platformName=Android</arg>
+<arg>platformVersion=${PLATFORM_VERSION}</arg>
+<arg>deviceName=${DEVICE_NAME}</arg>
+<arg>automationName=uiautomator2</arg>
+<arg>appPackage=com.google.android.keep</arg>
+<arg>appActivity=com.google.android.keep.activities.BrowseActivity</arg>
+<doc>Opens a new application to given Appium server.
+Capabilities of appium server, Android and iOS,
+Please check https://appium.io/docs/en/2.1/cli/args/
+| *Option*            | *Man.* | *Description*     |
+| remote_url          | Yes    | Appium server url |
+| alias               | no     | alias             |
+| strict_ssl          | No     | allows you to send commands to an invalid certificate host like a self-signed one. |</doc>
+<status status="PASS" start="2025-09-04T15:21:05.429008" elapsed="8.353614"/>
+</kw>
+<arg>${APPIUM-PORT}</arg>
+<arg>${DEVICE_UDID}</arg>
+<arg>${DEVICE_NAME}</arg>
+<arg>${PLATFORM_VERSION}</arg>
+<status status="PASS" start="2025-09-04T15:21:05.428554" elapsed="8.354207"/>
+</kw>
+<arg>GOOGLE_KEEP_NOTE</arg>
+<status status="PASS" start="2025-09-04T15:21:00.421499" elapsed="13.361318"/>
+</kw>
+<test id="s1-t1" name="AddNewNoteWithMultipleItems" line="22">
+<kw name="BeforeTest" owner="BaseTest" type="SETUP">
+<kw name="Launch Google Keep Note" owner="AppHelper">
+<kw name="Activate Application" owner="AppiumLibrary">
+<arg>com.google.android.keep</arg>
+<doc>Activates the application if it is not running or is running in the background.
+Args:
+ - app_id - BundleId for iOS. Package name for Android.</doc>
+<status status="PASS" start="2025-09-04T15:21:13.783818" elapsed="0.233228"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2025-09-04T15:21:14.018587" level="INFO">Clicking element 'com.google.android.keep:id/skip_welcome'.</msg>
+<msg time="2025-09-04T15:21:15.008536" level="INFO">criteria is com.google.android.keep:id/skip_welcome</msg>
+<arg>${SKIP_WELCOME}</arg>
+<doc>Click element identified by `locator`.</doc>
+<status status="PASS" start="2025-09-04T15:21:14.017265" elapsed="0.991351"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2025-09-04T15:21:15.009921" level="INFO">Clicking element '//android.widget.Button[@resource-id="android:id/button1"]'.</msg>
+<msg time="2025-09-04T15:21:16.458665" level="INFO">xpath criteria: //android.widget.Button[@resource-id="android:id/button1"]</msg>
+<arg>${CONTINUE}</arg>
+<doc>Click element identified by `locator`.</doc>
+<status status="PASS" start="2025-09-04T15:21:15.008774" elapsed="1.449975"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2025-09-04T15:21:18.041069" level="INFO">xpath criteria: //android.widget.Button[@resource-id="com.android.permissioncontroller:id/permission_allow_button"]
+xpath criteria: //android.widget.Button[@resource-id="com.android.permissioncontroller:id/permission_allow_button"]</msg>
+<arg>${PERMITIR}</arg>
+<doc>Waits until element specified with `locator` is visible.</doc>
+<status status="PASS" start="2025-09-04T15:21:16.458899" elapsed="1.582268"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2025-09-04T15:21:18.042729" level="INFO">Clicking element '//android.widget.Button[@resource-id="com.android.permissioncontroller:id/permission_allow_button"]'.</msg>
+<msg time="2025-09-04T15:21:18.340363" level="INFO">xpath criteria: //android.widget.Button[@resource-id="com.android.permissioncontroller:id/permission_allow_button"]</msg>
+<arg>${PERMITIR}</arg>
+<doc>Click element identified by `locator`.</doc>
+<status status="PASS" start="2025-09-04T15:21:18.041362" elapsed="0.299094"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2025-09-04T15:21:19.182540" level="INFO">criteria is com.google.android.keep:id/speed_dial_create_close_button
+criteria is com.google.android.keep:id/speed_dial_create_close_button</msg>
+<arg>${PLUS}</arg>
+<doc>Waits until element specified with `locator` is visible.</doc>
+<status status="PASS" start="2025-09-04T15:21:18.340645" elapsed="0.841967"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2025-09-04T15:21:19.183958" level="INFO">Clicking element 'com.google.android.keep:id/speed_dial_create_close_button'.</msg>
+<msg time="2025-09-04T15:21:19.450930" level="INFO">criteria is com.google.android.keep:id/speed_dial_create_close_button</msg>
+<arg>${PLUS}</arg>
+<doc>Click element identified by `locator`.</doc>
+<status status="PASS" start="2025-09-04T15:21:19.182758" elapsed="0.268231"/>
+</kw>
+<status status="PASS" start="2025-09-04T15:21:13.783657" elapsed="5.667386"/>
+</kw>
+<status status="PASS" start="2025-09-04T15:21:13.783422" elapsed="5.667646"/>
+</kw>
+<kw name="Get Random String" owner="Utility">
+<msg time="2025-09-04T15:21:19.451399" level="INFO">${title} = Title_lchry</msg>
+<var>${title}</var>
+<arg>5</arg>
+<arg>Title</arg>
+<status status="PASS" start="2025-09-04T15:21:19.451213" elapsed="0.000199"/>
+</kw>
+<kw name="Get Random String" owner="Utility">
+<msg time="2025-09-04T15:21:19.451575" level="INFO">${item1} = Item_gid</msg>
+<var>${item1}</var>
+<arg>3</arg>
+<arg>Item</arg>
+<status status="PASS" start="2025-09-04T15:21:19.451491" elapsed="0.000095"/>
+</kw>
+<kw name="Get Random String" owner="Utility">
+<msg time="2025-09-04T15:21:19.451730" level="INFO">${item2} = Item_fcm</msg>
+<var>${item2}</var>
+<arg>3</arg>
+<arg>Item</arg>
+<status status="PASS" start="2025-09-04T15:21:19.451657" elapsed="0.000083"/>
+</kw>
+<kw name="Add New Note With Two Items" owner="AddNoteHelper">
+<kw name="HomePage.Click_Add_New_Text_Icon" owner="HomePage">
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2025-09-04T15:21:21.476062" level="INFO">criteria is com.google.android.keep:id/new_note_button</msg>
+<arg>${ADD_NEW_TEXT_ICON}</arg>
+<doc>Waits until element specified with `locator` is visible.</doc>
+<status status="PASS" start="2025-09-04T15:21:19.452157" elapsed="2.023994"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2025-09-04T15:21:21.477722" level="INFO">Clicking element 'com.google.android.keep:id/new_note_button'.</msg>
+<msg time="2025-09-04T15:21:23.713281" level="INFO">criteria is com.google.android.keep:id/new_note_button</msg>
+<arg>${ADD_NEW_TEXT_ICON}</arg>
+<doc>Click element identified by `locator`.</doc>
+<status status="PASS" start="2025-09-04T15:21:21.476318" elapsed="2.237047"/>
+</kw>
+<status status="PASS" start="2025-09-04T15:21:19.452056" elapsed="4.261393"/>
+</kw>
+<kw name="AddNotePage.Enter_Title" owner="AddNotePage">
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2025-09-04T15:21:25.502061" level="INFO">criteria is com.google.android.keep:id/editable_title</msg>
+<arg>${TITLE_TEXT_BOX}</arg>
+<doc>Waits until element specified with `locator` is visible.</doc>
+<status status="PASS" start="2025-09-04T15:21:23.714095" elapsed="1.788016"/>
+</kw>
+<kw name="Input Text" owner="AppiumLibrary">
+<msg time="2025-09-04T15:21:25.503108" level="INFO">Typing text 'Title_lchry' into text field 'com.google.android.keep:id/editable_title'</msg>
+<msg time="2025-09-04T15:21:26.771418" level="INFO">criteria is com.google.android.keep:id/editable_title</msg>
+<arg>${TITLE_TEXT_BOX}</arg>
+<arg>${TITLE}</arg>
+<doc>Types the given `text` into text field identified by `locator`.</doc>
+<status status="PASS" start="2025-09-04T15:21:25.502220" elapsed="1.269280"/>
+</kw>
+<arg>${TITLE}</arg>
+<status status="PASS" start="2025-09-04T15:21:23.713769" elapsed="3.057819"/>
+</kw>
+<kw name="AddNotePage.Enter_Item" owner="AddNotePage">
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2025-09-04T15:21:27.855985" level="INFO">criteria is com.google.android.keep:id/edit_note_text</msg>
+<arg>${ITEM_BOX}</arg>
+<doc>Waits until element specified with `locator` is visible.</doc>
+<status status="PASS" start="2025-09-04T15:21:26.772388" elapsed="1.083685"/>
+</kw>
+<kw name="Input Text" owner="AppiumLibrary">
+<msg time="2025-09-04T15:21:27.857702" level="INFO">Typing text 'Item_gid' into text field 'com.google.android.keep:id/edit_note_text'</msg>
+<msg time="2025-09-04T15:21:29.239572" level="INFO">criteria is com.google.android.keep:id/edit_note_text</msg>
+<arg>${ITEM_BOX}</arg>
+<arg>${ITEM}</arg>
+<doc>Types the given `text` into text field identified by `locator`.</doc>
+<status status="PASS" start="2025-09-04T15:21:27.856338" elapsed="1.383343"/>
+</kw>
+<arg>${ITEM-1}</arg>
+<arg>0</arg>
+<status status="PASS" start="2025-09-04T15:21:26.771964" elapsed="2.467826"/>
+</kw>
+<kw name="AddNotePage.Back_Arrow" owner="AddNotePage">
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2025-09-04T15:21:31.964117" level="INFO">xpath criteria: //android.widget.ImageButton[@content-desc="Navegar hacia arriba"]</msg>
+<arg>${BACK_ARROW}</arg>
+<doc>Waits until element specified with `locator` is visible.</doc>
+<status status="PASS" start="2025-09-04T15:21:29.240469" elapsed="2.723719"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2025-09-04T15:21:31.965672" level="INFO">Clicking element '//android.widget.ImageButton[@content-desc="Navegar hacia arriba"]'.</msg>
+<msg time="2025-09-04T15:21:33.215045" level="INFO">xpath criteria: //android.widget.ImageButton[@content-desc="Navegar hacia arriba"]</msg>
+<arg>${BACK_ARROW}</arg>
+<doc>Click element identified by `locator`.</doc>
+<status status="PASS" start="2025-09-04T15:21:31.964339" elapsed="1.250805"/>
+</kw>
+<status status="PASS" start="2025-09-04T15:21:29.240083" elapsed="3.975155"/>
+</kw>
+<kw name="HomePage.Wait_For_Home_Page" owner="HomePage">
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2025-09-04T15:21:34.600011" level="INFO">criteria is com.google.android.keep:id/speed_dial_create_close_button</msg>
+<arg>${PLUS}</arg>
+<doc>Waits until element specified with `locator` is visible.</doc>
+<status status="PASS" start="2025-09-04T15:21:33.215773" elapsed="1.384327"/>
+</kw>
+<status status="PASS" start="2025-09-04T15:21:33.215481" elapsed="1.384697"/>
+</kw>
+<arg>${title}</arg>
+<arg>${item1}</arg>
+<arg>${item2}</arg>
+<status status="PASS" start="2025-09-04T15:21:19.451848" elapsed="15.148364"/>
+</kw>
+<status status="PASS" start="2025-09-04T15:21:13.782933" elapsed="20.817669"/>
+</test>
+<kw name="AfterSuite" owner="BaseTest" type="TEARDOWN">
+<kw name="Close Google Keep Note App" owner="AppHelper">
+<kw name="Close Application" owner="AppiumLibrary">
+<doc>Closes the current application and also close webdriver session.</doc>
+<status status="PASS" start="2025-09-04T15:21:34.601869" elapsed="0.443711"/>
+</kw>
+<status status="PASS" start="2025-09-04T15:21:34.601691" elapsed="0.443977"/>
+</kw>
+<kw name="Kill Appium Server" owner="AppiumManager">
+<msg time="2025-09-04T15:21:40.048542" level="INFO">Stopping Appium Server ..</msg>
+<status status="PASS" start="2025-09-04T15:21:35.045797" elapsed="5.002831"/>
+</kw>
+<arg>GOOGLE_KEEP_NOTE</arg>
+<status status="PASS" start="2025-09-04T15:21:34.601404" elapsed="5.447287"/>
+</kw>
+<status status="PASS" start="2025-09-04T15:21:00.357119" elapsed="39.691599"/>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="1" fail="0" skip="0" id="s1" name="Add Note Test">Add Note Test</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
