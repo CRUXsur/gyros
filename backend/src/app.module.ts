@@ -7,6 +7,7 @@ import { PrestamosModule } from './prestamos/prestamos.module';
 import { CommonModule } from './common/common.module';
 import { SeedModule } from './seed/seed.module';
 import { AuthModule } from './auth/auth.module';
+import { ClientesModule } from './clientes/clientes.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { AuthModule } from './auth/auth.module';
     CommonModule,
     SeedModule,
     AuthModule,
+    ClientesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
