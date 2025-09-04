@@ -14,14 +14,14 @@ export class Cliente {
     // apellidos: string;
 
     @Column('text',{
-        nullable: true,
+        unique: true,
     })
     ci: string;
 
-    @Column('text',{
-        nullable: true,
-    })
-    imei: string;
+    // @Column('text',{
+    //     nullable: true,
+    // })
+    // imei: string;
     
     @Column()
     telefono: string;

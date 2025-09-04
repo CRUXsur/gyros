@@ -16,9 +16,9 @@ export class CreateClienteDto {
     @MinLength(1)
     ci: string;
 
-    @IsString()
-    @MinLength(1)
-    imei: string;
+    // @IsString()
+    // @MinLength(1)
+    // imei: string;
 
     @IsString()
     @MinLength(1)
