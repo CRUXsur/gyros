@@ -7,7 +7,7 @@ Library    AppiumLibrary
 ${SKIP_WELCOME}     com.google.android.keep:id/skip_welcome
 ${CONTINUE}         //android.widget.Button[@resource-id="android:id/button1"]
 ${PERMITIR}         //android.widget.Button[@resource-id="com.android.permissioncontroller:id/permission_allow_button"]
-
+${PLUS}             com.google.android.keep:id/speed_dial_create_close_button
 
 *** Keywords ***
 Open Google Keep Note App
@@ -30,5 +30,7 @@ Launch Google Keep Note
     click element   ${CONTINUE}
     wait until element is visible   ${PERMITIR}
     click element   ${PERMITIR}
+    wait until element is visible   ${PLUS}
+    click element   ${PLUS}
 
 
