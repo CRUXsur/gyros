@@ -25,6 +25,10 @@ export class CreateClienteDto {
     telefono: string;
 
     @IsString()
+    @MinLength(1)
+    device_id: string;
+
+    @IsString()
     @IsEmail()
     email: string;
 
