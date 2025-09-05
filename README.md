@@ -1,3 +1,4 @@
+ 
 <p align="center">
   <a href="http://postgre.org/" target="blank"><img src="https://wiki.postgresql.org/images/a/a4/PostgreSQL_logo.3colors.svg" width="80" alt="PostgreSQL Logo" /></a>
   &nbsp;&nbsp;&nbsp;&nbsp;
@@ -15,16 +16,33 @@
 
 1. Clonar proyecto
 2. ```yarn install```
-3. Clonar el archivo ```.env.template``` y renombrarlo a ```.env```
-4. Cambiar las variables de entorno
-5. Levantar la base de datos
+3. ```yarn build```
+4. Clonar el archivo ```.env.template``` y renombrarlo a ```.env```
+5. Cambiar las variables de entorno
+6. Levantar la base de datos
     ```
     docker-compose up -d
     ```
-6. levantar ``` yarn start:dev ```    
+7. levantar ``` yarn start:dev ```    
 
+
+
+## Robot - Automatizacion Python
+
+1. Levantar Appium
+    ```
+    start Appium 
+    ```
+
+2. Levantar script
+   ```    
+   robot -d Report Test/Add_Note_Test.robot 
+   ```
 
 
 ## 
 
 <p align="center"> Powerded by: <a href="http://quanticasoft.org" target="_blank">QUANTICASoft</a> </p>
+
+
+
