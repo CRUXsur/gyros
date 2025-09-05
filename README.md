@@ -23,6 +23,14 @@
     ```
 6. levantar ``` yarn start:dev ```    
 
+## Robot
+```python test_device_detection.py```
+```robot Test/Device_Detection_Test.robot```
+
+```robot Test/Add_Note_Test.robot```
+
+```python3 test_device_detection.py```
+
 
 
 ## 
