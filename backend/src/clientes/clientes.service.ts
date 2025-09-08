@@ -38,7 +38,7 @@ export class ClientesService {
     let cliente: Cliente | null;
 
     if(isUUID(term)) {
-      cliente = await this.clienteRepository.findOneBy({id:term});
+      cliente = await this.clienteRepository.findOneBy({id_cliente:term});
     }else{
       cliente = await this.clienteRepository.findOneBy({ci:term});
     }
@@ -50,20 +50,14 @@ export class ClientesService {
     return cliente;
   }
 
-  update(id: number, updateClienteDto: UpdateClienteDto) {
-    return `This action updates a #${id} cliente`;
+  update(id_cliente: number, updateClienteDto: UpdateClienteDto) {
+    return `This action updates a #${id_cliente} cliente`;
   }
 
-  async remove(id: string) {
-    const cliente = await this.findOne(id);
+  async remove(id_cliente: string) {
+    const cliente = await this.findOne(id_cliente);
     await this.clienteRepository.remove(cliente);
   }
-
-
-
-
-
-
 
   private handleDBExceptions(error: any){
     if(error.code === '23505') 
@@ -73,4 +67,5 @@ export class ClientesService {
     // console.log(error);
     throw new InternalServerErrorException('Unexpected error, check server logs');
   }
+
 }

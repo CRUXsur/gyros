@@ -5,13 +5,13 @@ import { BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn } fr
 @Entity()
 export class Cliente {
     @PrimaryGeneratedColumn('uuid')
-    id: string;
+    id_cliente: string;
 
     @Column()
     nombres: string;
 
-    // @Column()
-    // apellidos: string;
+    @Column()
+    apellidos: string;
 
     @Column('text',{
         unique: true,
@@ -34,20 +34,8 @@ export class Cliente {
     @Column()
     email: string;
 
-    // @Column()
-    // direccion: string;
-
-    // @Column()
-    // ciudad: string;
-
-    // @Column()
-    // pais: string;
-
-    // @Column()
-    // fecha_nacimiento: Date;
-
-    // @Column()
-    // edad: string;
+    @Column()
+    direccion: string;
 
     @Column('text',{
         array: true,
@@ -91,6 +79,21 @@ export class Cliente {
 
     // @Column()
     // tarjeta: string;
+
+    // @Column()
+    // ciudad: string;
+
+    // @Column()
+    // pais: string;
+
+    // @Column()
+    // fecha_nacimiento: Date;
+
+    // @Column()
+    // edad: string;
+
+    @Column()
+    fecha_registro: Date;
 
     @Column('bool', {
         default: true,

@@ -1,4 +1,4 @@
-import { IsArray, IsBoolean, IsEmail, IsNumber, IsOptional, IsPositive, IsString, MinLength } from "class-validator";
+import { IsArray, IsBoolean, IsDate, IsEmail, IsNumber, IsOptional, IsPositive, IsString, MinLength } from "class-validator";
 
 
 
@@ -8,9 +8,9 @@ export class CreateClienteDto {
     @MinLength(1)
     nombres: string;
 
-    // @IsString()
-    // @MinLength(1)
-    // apellidos: string;
+    @IsString()
+    @MinLength(1)
+    apellidos: string;
 
     @IsString()
     @MinLength(1)
@@ -19,6 +19,10 @@ export class CreateClienteDto {
     // @IsString()
     // @MinLength(1)
     // imei: string;
+    
+    @IsString()
+    @IsEmail()
+    email: string;
 
     @IsString()
     @MinLength(1)
@@ -29,12 +33,23 @@ export class CreateClienteDto {
     device_id: string;
 
     @IsString()
-    @IsEmail()
-    email: string;
+    @MinLength(1)
+    direccion: string;
 
-    // @IsString()
-    // @MinLength(1)
-    // direccion: string;
+    @IsString({ each: true })
+    @IsArray()
+    sexo: string[];
+
+    @IsString({ each: true })
+    @IsArray()
+    estado_civil: string[];
+
+    @IsDate()
+    fecha_registro: Date;
+
+    @IsBoolean()
+    @IsOptional()
+    isActive: boolean;
 
     // @IsString()
     // @MinLength(1)
@@ -47,14 +62,6 @@ export class CreateClienteDto {
     // @IsString()
     // @MinLength(1)
     // edad: string;
-
-    @IsString({ each: true })
-    @IsArray()
-    sexo: string[];
-
-    @IsString({ each: true })
-    @IsArray()
-    estado_civil: string[];
 
     // @IsString()
     // @MinLength(1)
@@ -83,10 +90,6 @@ export class CreateClienteDto {
     // @IsString()
     // @MinLength(1)
     // tarjeta: string;
-
-    @IsBoolean()
-    @IsOptional()
-    isActive: boolean;
 
 
 }
