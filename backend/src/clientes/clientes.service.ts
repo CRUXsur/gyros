@@ -50,8 +50,27 @@ export class ClientesService {
     return cliente;
   }
 
-  update(id_cliente: number, updateClienteDto: UpdateClienteDto) {
-    return `This action updates a #${id_cliente} cliente`;
+  async update(id_cliente: string, updateClienteDto: UpdateClienteDto) {
+    try {
+      // Verificar que el cliente existe
+      const cliente = await this.findOne(id_cliente);
+      
+      // Precargar los datos actualizados
+      const clienteToUpdate = await this.clienteRepository.preload({
+        id_cliente: cliente.id_cliente,
+        ...updateClienteDto,
+      });
+
+      if (!clienteToUpdate) {
+        throw new NotFoundException(`Cliente con id ${id_cliente} no encontrado`);
+      }
+
+      await this.clienteRepository.save(clienteToUpdate);
+      return clienteToUpdate;
+      
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
   }
 
   async remove(id_cliente: string) {

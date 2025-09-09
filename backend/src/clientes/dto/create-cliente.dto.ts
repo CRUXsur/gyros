@@ -1,4 +1,4 @@
-import { IsArray, IsBoolean, IsDate, IsEmail, IsNumber, IsOptional, IsPositive, IsString, MinLength } from "class-validator";
+import { IsArray, IsBoolean, IsDate, IsEmail, IsIn, IsNumber, IsOptional, IsPositive, IsString, MinLength } from "class-validator";
 
 
 
@@ -36,13 +36,15 @@ export class CreateClienteDto {
     @MinLength(1)
     direccion: string;
 
-    @IsString({ each: true })
-    @IsArray()
-    sexo: string[];
+    @IsString()
+    @IsIn(['hombre', 'mujer', 'no_especificado'])
+    @IsOptional()
+    sexo?: string;
 
-    @IsString({ each: true })
-    @IsArray()
-    estado_civil: string[];
+    @IsString()
+    @IsIn(['soltero', 'casado', 'divorciado', 'viudo'])
+    @IsOptional()
+    estado_civil?: string;
 
     @IsDate()
     fecha_registro: Date;

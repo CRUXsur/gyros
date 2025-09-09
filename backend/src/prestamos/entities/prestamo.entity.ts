@@ -1,70 +1,45 @@
 import{ BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn, OneToMany, ManyToOne } from "typeorm";
 import { PrestamoImage } from "./";
 import { User } from "../../auth/entities/user.entity";
+import { Cliente } from "src/clientes/entities/cliente.entity";
 
 
 @Entity()
 export class Prestamo {
     @PrimaryGeneratedColumn('uuid')
-    id: string;
+    id_prestamo: string;
 
-    @Column('text',{ 
-        unique: true,
+    @ManyToOne(
+        () => Cliente,
+        { eager: true }
+    )
+    cliente: Cliente;
+
+    @Column('float',{
+      default: 0
      })
-     title: string;
+     monto_prestado: number;
 
-     @Column('float',{
-        default: 0
+    @Column('float',{
+      default: 0
      })
-     price: number;
+     tasa_interes: number;
 
-     @Column('text',{
-        nullable: true
+    @Column('int',{
+      default: 0
      })
-     description: string;
+     plazo_meses: number;
 
-     @Column('text',{
-        unique: true
+    @Column()
+     fecha_prestamo: Date;
+
+    @Column()
+     fecha_vencimiento: Date;
+ 
+    @Column('bool', {
+         default: true,
      })
-     slug: string;
-
-     @Column('int',{
-        default: 0
-     })
-     stock: number;
-
-     @Column('text',{
-        array: true
-     })
-     sizes: string[];
-
-     @Column('text')
-     gender: string;
-     
-     @BeforeInsert()
-     checkSlugInsert(){
-        if(!this.slug){
-            this.slug = this.title;
-        }
-        this.slug = this.slug
-         .toLowerCase()
-         .replaceAll(' ', '_')
-         .replaceAll("'", '');
-     }
-
-     @BeforeUpdate()
-     checkSlugUpdate(){
-        this.slug = this.slug
-         .toLowerCase()
-         .replaceAll(' ', '_')
-         .replaceAll("'", '');
-     }
-
-     @Column('text',{
-        array: true,
-        default: []
-     })
-     tags: string[];
+     isActive: boolean;
 
      
      @OneToMany(

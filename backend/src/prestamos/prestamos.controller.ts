@@ -35,24 +35,24 @@ export class PrestamosController {
   //   return this.prestamosService.findOne(id);
   // }
 
-  @Get(':term')
-  findOne(@Param('term') term: string) {
-    return this.prestamosService.findOnePlain(term);
+  @Get(':id_prestamo')
+  findOne(@Param('id_prestamo') id_prestamo: string) {
+    return this.prestamosService.findOnePlain(id_prestamo);
   }
 
-  @Patch(':id')
+  @Patch(':id_prestamo')
   @Auth( ValidRoles.admin )
   update(
-    @Param( 'id', ParseUUIDPipe ) id: string, 
+    @Param( 'id_prestamo', ParseUUIDPipe ) id_prestamo: string, 
     @Body() updatePrestamoDto: UpdatePrestamoDto,
     @GetUser() user: User,
   ) {
-    return this.prestamosService.update(id, updatePrestamoDto, user);
+    return this.prestamosService.update(id_prestamo, updatePrestamoDto, user);
   }
 
-  @Delete(':id')
+  @Delete(':id_prestamo')
   @Auth( ValidRoles.admin )
-  remove(@Param('id', ParseUUIDPipe) id: string) {
-    return this.prestamosService.remove(id);
+  remove(@Param('id_prestamo', ParseUUIDPipe) id_prestamo: string) {
+    return this.prestamosService.remove(id_prestamo);
   }
 }

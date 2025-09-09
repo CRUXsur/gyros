@@ -6,7 +6,7 @@ import { Prestamo } from "./prestamo.entity";
 @Entity()
 export class PrestamoImage {
     @PrimaryGeneratedColumn()
-    id: number;
+    id_prestamo_image: number;
 
     @Column('text')
     url: string;

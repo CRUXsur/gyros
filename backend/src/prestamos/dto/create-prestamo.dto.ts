@@ -1,44 +1,41 @@
 import { IsString, MinLength, IsNumber, IsPositive, 
-         IsOptional, IsInt, IsArray, IsIn 
+         IsOptional, IsInt, IsArray, IsIn, IsDate, IsBoolean     
 } from "class-validator";
 
 
 
 export class CreatePrestamoDto {
-    
+ 
     @IsString()
     @MinLength(1)
-    title: string;
+    id_cliente: string;
 
     @IsNumber()
     @IsPositive()
     @IsOptional()
-    price?: number;
-    
-    @IsString()
+    monto_prestado?: number;
+
+    @IsNumber()
+    @IsPositive()
     @IsOptional()
-    description?: string;
-    
-    @IsString()
-    @IsOptional()
-    slug?: string;
-    
+    tasa_interes?: number;
+
     @IsInt()
     @IsPositive()
     @IsOptional()
-    stock?: number;
+    plazo_meses?: number;
 
-    @IsString({ each: true })
-    @IsArray()
-    sizes: string[];
-
-    @IsIn(['men', 'women', 'kid', 'unisex'])
-    gender: string;
-
-    @IsString({ each: true })
-    @IsArray()
+    @IsDate()
     @IsOptional()
-    tags?: string[];
+    fecha_prestamo?: Date;
+
+    @IsDate()
+    @IsOptional()
+    fecha_vencimiento?: Date;
+
+    @IsBoolean()
+    @IsOptional()
+    isActive?: boolean;
 
     @IsString({ each: true })
     @IsArray()

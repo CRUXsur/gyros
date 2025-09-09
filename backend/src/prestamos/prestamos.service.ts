@@ -7,6 +7,7 @@ import { BadRequestException, Injectable,InternalServerErrorException, Logger, N
 import { PaginationDto } from 'src/common/dtos/pagination.dto';
 import { validate as isUUID} from 'uuid';
 import { User } from '../auth/entities/user.entity';
+import { Cliente } from '../clientes/entities/cliente.entity';
 
 @Injectable()
 export class PrestamosService {
@@ -18,34 +19,29 @@ export class PrestamosService {
     private readonly prestamoRepository: Repository<Prestamo>,
     @InjectRepository(PrestamoImage)
     private readonly prestamoImageRepository: Repository<PrestamoImage>,
+    @InjectRepository(Cliente)
+    private readonly clienteRepository: Repository<Cliente>,
     private readonly dataSource: DataSource,
   ){}
 
   async create(createPrestamoDto: CreatePrestamoDto, user: User) {
     try {
-      // if(!createPrestamoDto.slug) {
+      const {images = [], id_cliente, ...prestamoDetails} = createPrestamoDto;
+      
+      // Verificar que el cliente existe
+      const cliente = await this.clienteRepository.findOneBy({id_cliente});
+      if (!cliente) {
+        throw new NotFoundException(`Cliente con id ${id_cliente} no encontrado`);
+      }
 
-      //   createPrestamoDto.slug = createPrestamoDto.title
-      //      .toLowerCase()
-      //      .replaceAll(' ', '_')
-      //      .replaceAll("'", '');
-      // }else{
-      //   createPrestamoDto.slug = createPrestamoDto.slug
-      //      .toLowerCase()
-      //      .replaceAll(' ', '_')
-      //      .replaceAll("'", '');
-      // }
-
-      const {images = [], ...prestamoDetails} = createPrestamoDto;
       const prestamo = this.prestamoRepository.create({
         ...prestamoDetails,
+        cliente,
         images: images.map(image => this.prestamoImageRepository.create({url: image})),
-        // user: user,
         user,
       });
       await this.prestamoRepository.save(prestamo);
 
-      // return prestamo;
       return {...prestamo, images: images};
       
     } catch (error) {
@@ -62,6 +58,8 @@ export class PrestamosService {
       skip: offset,
       relations: {
         images: true,
+        cliente: true,
+        user: true,
       }
     })
     return prestamos.map(prestamo => ({
@@ -75,16 +73,17 @@ export class PrestamosService {
     let prestamo: Prestamo | null;
     
     if(isUUID(term)) {
-      prestamo = await this.prestamoRepository.findOneBy({id:term});
+      prestamo = await this.prestamoRepository.findOne({
+        where: {id_prestamo: term},
+        relations: {
+          images: true,
+          cliente: true,
+          user: true,
+        }
+      });
     }else{
-      const queryBuilder = this.prestamoRepository.createQueryBuilder();
-      prestamo = await queryBuilder
-        .where('UPPER(title) =:title or slug =:slug', {
-          title: term.toUpperCase(),
-          slug: term.toLowerCase(),
-        })
-        .leftJoinAndSelect('prestamo.images', 'images')
-        .getOne();
+      // Si no es UUID, podríamos buscar por algún otro campo
+      throw new BadRequestException('El término de búsqueda debe ser un UUID válido');
     }
 
     if(!prestamo) 
@@ -103,10 +102,10 @@ export class PrestamosService {
   }
 
   
-  async update(id: string, updatePrestamoDto: UpdatePrestamoDto, user: User) {
+  async update(id_prestamo: string, updatePrestamoDto: UpdatePrestamoDto, user: User) {
     const {images, ...toUpdate} = updatePrestamoDto;
     const prestamo = await this.prestamoRepository.preload({
-      id,...toUpdate,
+      id_prestamo,...toUpdate,
     });
 
     // const prestamo = await this.prestamoRepository.preload({
@@ -115,7 +114,7 @@ export class PrestamosService {
     //   images: [],
     // });
 
-    if(!prestamo) throw new NotFoundException(`Prestamo con id ${id} no encontrado`);
+    if(!prestamo) throw new NotFoundException(`Prestamo con id ${id_prestamo} no encontrado`);
  
     // Create query runner
     const queryRunner = this.dataSource.createQueryRunner();
@@ -125,13 +124,13 @@ export class PrestamosService {
 
     try {
       if(images) {
-        await queryRunner.manager.delete(PrestamoImage, {prestamo: {id}});
+        await queryRunner.manager.delete(PrestamoImage, {prestamo: {id_prestamo}});
         prestamo.images = images.map(
           image => this.prestamoImageRepository.create({url: image})
         );
       }else{
         // prestamo.images
-        prestamo.images = await this.prestamoImageRepository.findBy({prestamo: {id}});
+        prestamo.images = await this.prestamoImageRepository.findBy({prestamo: {id_prestamo}});
       }
       prestamo.user = user;
       await queryRunner.manager.save(prestamo);
@@ -139,7 +138,7 @@ export class PrestamosService {
       await queryRunner.release();
 
       // return prestamo;
-      return this.findOnePlain( id );
+      return this.findOnePlain( id_prestamo );
 
     } catch (error) {
       await queryRunner.rollbackTransaction();
@@ -150,8 +149,8 @@ export class PrestamosService {
     
   }
 
-  async remove(id: string) {
-    const prestamo = await this.findOne(id);
+  async remove(id_prestamo: string) {
+    const prestamo = await this.findOne(id_prestamo);
     await this.prestamoRepository.remove(prestamo);
   }
 

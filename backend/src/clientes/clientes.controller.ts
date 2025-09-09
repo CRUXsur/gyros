@@ -30,7 +30,7 @@ export class ClientesController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateClienteDto: UpdateClienteDto) {
-    return this.clientesService.update(+id, updateClienteDto);
+    return this.clientesService.update(id, updateClienteDto);
   }
 
   @Delete(':id')

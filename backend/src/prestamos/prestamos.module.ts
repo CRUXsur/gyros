@@ -7,13 +7,14 @@ import { PrestamosController } from './prestamos.controller';
 import { PrestamosService } from './prestamos.service';
 
 import { Prestamo, PrestamoImage } from './entities';
+import { Cliente } from '../clientes/entities/cliente.entity';
 
 
 @Module({
   controllers: [PrestamosController],
   providers: [PrestamosService],
   imports:[
-    TypeOrmModule.forFeature([Prestamo, PrestamoImage]),
+    TypeOrmModule.forFeature([Prestamo, PrestamoImage, Cliente]),
     AuthModule
   ]
 })

@@ -38,16 +38,14 @@ export class Cliente {
     direccion: string;
 
     @Column('text',{
-        array: true,
-        default: ['mujer', 'hombre']
+        default: 'no_especificado'
     })
-    sexo: string[];
+    sexo: string;
 
     @Column('text',{
-        array: true,
-        default: ['soltero', 'casado', 'divorciado', 'viudo']
+        default: 'soltero'
     })
-    estado_civil: string[];
+    estado_civil: string;
 
     // @Column()
     // ocupacion: string;
