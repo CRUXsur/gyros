@@ -1,6 +1,7 @@
 import { IsString, MinLength, IsNumber, IsPositive, 
          IsOptional, IsInt, IsArray, IsIn, IsDate, IsBoolean     
 } from "class-validator";
+import { Type } from "class-transformer";
 
 
 
@@ -26,10 +27,12 @@ export class CreatePrestamoDto {
     plazo_meses?: number;
 
     @IsDate()
+    @Type(() => Date)
     @IsOptional()
     fecha_prestamo?: Date;
 
     @IsDate()
+    @Type(() => Date)
     @IsOptional()
     fecha_vencimiento?: Date;
 

@@ -1,4 +1,5 @@
 import { IsArray, IsBoolean, IsDate, IsEmail, IsIn, IsNumber, IsOptional, IsPositive, IsString, MinLength } from "class-validator";
+import { Transform, Type } from "class-transformer";
 
 
 
@@ -47,6 +48,7 @@ export class CreateClienteDto {
     estado_civil?: string;
 
     @IsDate()
+    @Type(() => Date)
     fecha_registro: Date;
 
     @IsBoolean()
