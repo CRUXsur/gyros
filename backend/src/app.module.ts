@@ -8,6 +8,8 @@ import { CommonModule } from './common/common.module';
 import { SeedModule } from './seed/seed.module';
 import { AuthModule } from './auth/auth.module';
 import { ClientesModule } from './clientes/clientes.module';
+import { CuotasModule } from './cuotas/cuotas.module';
+import { PagosModule } from './pagos/pagos.module';
 
 @Module({
   imports: [
@@ -27,6 +29,8 @@ import { ClientesModule } from './clientes/clientes.module';
     SeedModule,
     AuthModule,
     ClientesModule,
+    CuotasModule,
+    PagosModule,
   ],
   controllers: [AppController],
   providers: [AppService],
