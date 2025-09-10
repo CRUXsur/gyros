@@ -102,6 +102,11 @@ export class Cliente {
     checkFieldsBeforeInsert() {
         this.email = this.email.toLowerCase().trim();
         this.ci = this.ci.toString().trim();
+        
+        // Set fecha_registro to current date and time if not provided
+        if (!this.fecha_registro) {
+            this.fecha_registro = new Date();
+        }
     }
 
     @BeforeUpdate()

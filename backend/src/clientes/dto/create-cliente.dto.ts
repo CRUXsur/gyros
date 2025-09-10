@@ -49,7 +49,8 @@ export class CreateClienteDto {
 
     @IsDate()
     @Type(() => Date)
-    fecha_registro: Date;
+    @IsOptional()
+    fecha_registro?: Date;
 
     @IsBoolean()
     @IsOptional()
