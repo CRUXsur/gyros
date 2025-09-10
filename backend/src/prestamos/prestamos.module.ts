@@ -16,6 +16,10 @@ import { Cliente } from '../clientes/entities/cliente.entity';
   imports:[
     TypeOrmModule.forFeature([Prestamo, PrestamoImage, Cliente]),
     AuthModule
+  ],
+  exports: [
+    PrestamosService,
+    TypeOrmModule
   ]
 })
 export class PrestamosModule {}

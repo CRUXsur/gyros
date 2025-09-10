@@ -36,7 +36,7 @@ import {
   @JoinColumn()
   cliente?: Cliente;
 
-  @ManyToOne(() => User, { eager: true })
+  @ManyToOne(() => User, { nullable: true, eager: true })
   @JoinColumn()
-  user: User;
+  user?: User;
   }

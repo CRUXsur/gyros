@@ -1,14 +1,18 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import { AutomationLog } from './entities/automation-log.entity';
 import { Cliente } from '../clientes/entities/cliente.entity';
 import { Prestamo } from '../prestamos/entities/prestamo.entity';
 import { User } from '../auth/entities/user.entity';
 import { PythonExecutorService } from './python-executor.service';
 import { AutomationActionDto } from './dto/automation-action.dto';
-import { DeviceValidationResult } from './interfaces/automation-result.interface';
-import { OrchestrationResult,AutomationStatus } from './interfaces/automation-result.interface';
+import { 
+  DeviceValidationResult, 
+  OrchestrationResult,
+  AutomationStatus 
+} from './interfaces/automation-result.interface';
 
 
 
@@ -177,21 +181,25 @@ export class AutomationService {
     result: any;
     success: boolean;
     cliente: Cliente | null;
-    user: User;
+    user: User | null;
   }): Promise<AutomationLog> {
     try {
-      // Crear el objeto base sin cliente
+      // Crear el objeto base sin relaciones opcionales
       const logEntry: Partial<AutomationLog> = {
         deviceId: logData.deviceId,
         action: logData.action,
         result: logData.result,
         success: logData.success,
-        user: logData.user,
       };
 
       // Solo agregar cliente si no es null
       if (logData.cliente) {
         logEntry.cliente = logData.cliente;
+      }
+
+      // Solo agregar user si no es null
+      if (logData.user) {
+        logEntry.user = logData.user;
       }
 
       const log = this.automationLogRepository.create(logEntry);
@@ -244,5 +252,128 @@ export class AutomationService {
     });
     
     return total > 0 ? (successful / total) * 100 : 0;
+  }
+
+  // ========================================
+  // MÉTODOS DE CRON JOBS / TAREAS PROGRAMADAS
+  // ========================================
+
+  @Cron('0 * * * *') // Cada hora
+  async hourlyDeviceCheck() {
+    this.logger.log('🕐 Ejecutando verificación automática por hora...');
+    
+    try {
+      // Verificar si hay dispositivos conectados
+      const deviceId = await this.pythonExecutorService.executeDeviceDetection();
+      
+      if (deviceId) {
+        // Validar cliente automáticamente
+        const validation = await this.validateClienteDevice(deviceId);
+        
+        if (validation.isValid && validation.hasActiveLoans) {
+          this.logger.log(`📱 Cliente detectado automáticamente: ${validation.cliente?.nombres} con ${validation.activeLoans.length} préstamo(s) activo(s)`);
+          
+          // Log de detección automática
+          await this.logAutomationProcess({
+            deviceId,
+            action: 'hourly_device_check',
+            result: {
+              cliente: validation.cliente,
+              activeLoans: validation.activeLoans.length,
+              timestamp: new Date(),
+            },
+            success: true,
+            cliente: validation.cliente,
+            user: null, // Sistema automático
+          });
+        }
+      }
+    } catch (error) {
+      this.logger.warn(`⚠️ Verificación automática falló: ${error.message}`);
+    }
+  }
+
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT) // Todos los días a medianoche
+  async dailyReportGeneration() {
+    this.logger.log('🌙 Generando reporte diario de automatización...');
+    
+    try {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      const todayLogs = await this.automationLogRepository.find({
+        where: {
+          timestamp: today,
+        },
+        relations: ['cliente', 'user'],
+      });
+
+      const report = {
+        date: today.toISOString().split('T')[0],
+        totalProcesses: todayLogs.length,
+        successfulProcesses: todayLogs.filter(log => log.success).length,
+        failedProcesses: todayLogs.filter(log => !log.success).length,
+        uniqueDevices: [...new Set(todayLogs.map(log => log.deviceId))].length,
+        uniqueClientes: [...new Set(todayLogs.filter(log => log.cliente).map(log => log.cliente?.id_cliente))].length,
+      };
+
+      this.logger.log(`📊 Reporte diario generado: ${JSON.stringify(report, null, 2)}`);
+      
+      // Log del reporte
+      await this.logAutomationProcess({
+        deviceId: 'system',
+        action: 'daily_report',
+        result: report,
+        success: true,
+        cliente: null,
+        user: null,
+      });
+
+    } catch (error) {
+      this.logger.error(`❌ Error generando reporte diario: ${error.message}`);
+    }
+  }
+
+  @Cron('0 0 1 * *') // Primer día de cada mes a medianoche
+  async monthlyMaintenance() {
+    this.logger.log('🔧 Ejecutando mantenimiento mensual...');
+    
+    try {
+      // Limpiar logs antiguos (mayor a 3 meses)
+      const threeMonthsAgo = new Date();
+      threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+      
+      const deletedLogs = await this.automationLogRepository
+        .createQueryBuilder()
+        .delete()
+        .where('timestamp < :date', { date: threeMonthsAgo })
+        .execute();
+
+      this.logger.log(`🗑️ Limpieza completada: ${deletedLogs.affected} logs eliminados`);
+      
+      // Log de mantenimiento
+      await this.logAutomationProcess({
+        deviceId: 'system',
+        action: 'monthly_maintenance',
+        result: {
+          deletedLogs: deletedLogs.affected,
+          cleanupDate: threeMonthsAgo,
+          maintenanceDate: new Date(),
+        },
+        success: true,
+        cliente: null,
+        user: null,
+      });
+
+    } catch (error) {
+      this.logger.error(`❌ Error en mantenimiento mensual: ${error.message}`);
+    }
+  }
+
+  // Método manual para triggers de testing
+  async triggerScheduledCheck(): Promise<any> {
+    this.logger.log('🔧 Ejecutando verificación manual programada...');
+    await this.hourlyDeviceCheck();
+    return { message: 'Verificación programada ejecutada manualmente' };
   }
 }

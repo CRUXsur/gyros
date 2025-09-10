@@ -1,23 +1,23 @@
 import { 
-    Controller, 
-    Get, 
-    Post, 
-    Body, 
-    Query, 
-    Param,
-    HttpStatus,
-    HttpCode 
-  } from '@nestjs/common';
-  import { AutomationService } from './automation.service';
-  import { PythonExecutorService } from './python-executor.service';
-  import { DeviceCheckDto } from './dto/device-check.dto';
-  import { AutomationActionDto } from './dto/automation-action.dto';
-  import { Auth, GetUser } from '../auth/decorators';
-  import { ValidRoles } from '../auth/interfaces';
-  import { User } from '../auth/entities/user.entity';
-  
-  @Controller('automation')
-  export class AutomationController {
+  Controller, 
+  Get, 
+  Post, 
+  Body, 
+  Query, 
+  Param,
+  HttpStatus,
+  HttpCode 
+} from '@nestjs/common';
+import { AutomationService } from './automation.service';
+import { PythonExecutorService } from './python-executor.service';
+import { DeviceCheckDto } from './dto/device-check.dto';
+import { AutomationActionDto } from './dto/automation-action.dto';
+import { Auth, GetUser } from '../auth/decorators';
+import { ValidRoles } from '../auth/interfaces';
+import { User } from '../auth/entities/user.entity';
+
+@Controller('automation')
+export class AutomationController {
     constructor(
       private readonly automationService: AutomationService,
       private readonly pythonExecutorService: PythonExecutorService,
@@ -104,12 +104,31 @@ import {
           message: isValid ? 'Dispositivo válido' : 'Dispositivo no válido',
         };
       } catch (error) {
-        return {
-          success: false,
-          deviceId,
-          isValid: false,
-          error: error.message,
-        };
-      }
+      return {
+        success: false,
+        deviceId,
+        isValid: false,
+        error: error.message,
+      };
     }
   }
+
+  @Post('trigger-scheduled-check')
+  @Auth(ValidRoles.admin)
+  async triggerScheduledCheck() {
+    try {
+      const result = await this.automationService.triggerScheduledCheck();
+      return {
+        success: true,
+        message: 'Verificación programada ejecutada manualmente',
+        result,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        message: 'Error ejecutando verificación programada',
+      };
+    }
+  }
+}
