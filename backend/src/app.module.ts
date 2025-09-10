@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { ClientesModule } from './clientes/clientes.module';
 import { CuotasModule } from './cuotas/cuotas.module';
 import { PagosModule } from './pagos/pagos.module';
+import { AutomationModule } from './automation/automation.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { PagosModule } from './pagos/pagos.module';
     ClientesModule,
     CuotasModule,
     PagosModule,
+    AutomationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
