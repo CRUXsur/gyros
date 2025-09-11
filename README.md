@@ -32,6 +32,13 @@
 ```python3 test_device_detection.py```
 
 
+## Endpoints
+```✅ GET /api/automation/status ```
+```✅ GET /api/automation/check-device-id ```
+```✅ POST /api/automation/start-process ```
+```✅ GET /api/automation/history ```
+```✅ POST /api/automation/trigger-scheduled-check ```
+
 
 ## 
 
