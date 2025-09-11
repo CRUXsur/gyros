@@ -106,7 +106,7 @@ export class AutomationService {
           break;
           
         case 'execute_robot_action':
-          actionResult = await this.pythonExecutorService.executeRobotAction(deviceId);
+          actionResult = await this.pythonExecutorService.executeAutomationInterface('make_action');
           break;
           
         default:

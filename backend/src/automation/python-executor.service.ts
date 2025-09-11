@@ -158,6 +158,58 @@ except Exception as e:
     });
   }
 
+  async executeAutomationInterface(actionType: string): Promise<any> {
+    this.logger.log(`Ejecutando automation interface con acción: ${actionType}`);
+    
+    return new Promise((resolve, reject) => {
+      const scriptPath = path.join(this.robotPath, 'automation_interface.py');
+      const pythonProcess = spawn('python3', [scriptPath, actionType]);
+
+      let outputData = '';
+      let errorData = '';
+
+      pythonProcess.stdout.on('data', (data) => {
+        outputData += data.toString();
+      });
+
+      pythonProcess.stderr.on('data', (data) => {
+        errorData += data.toString();
+      });
+
+      pythonProcess.on('close', (code) => {
+        try {
+          // Buscar el JSON en la salida
+          const jsonMatch = outputData.match(/📊 RESULTADO FINAL:\s*(\{[\s\S]*?\})\s*={60}/);
+          
+          if (jsonMatch && jsonMatch[1]) {
+            const result = JSON.parse(jsonMatch[1]);
+            this.logger.log(`Automation Interface completado: ${actionType}`);
+            resolve(result);
+          } else if (code === 0) {
+            // Fallback si no encontramos el JSON pero el proceso fue exitoso
+            resolve({
+              success: true,
+              actionType,
+              output: outputData,
+              timestamp: new Date(),
+            });
+          } else {
+            this.logger.error(`Automation Interface falló con código: ${code}`);
+            reject(new Error(`Proceso falló: ${errorData || 'Código de salida ' + code}`));
+          }
+        } catch (parseError) {
+          this.logger.error('Error parseando resultado JSON:', parseError);
+          reject(new Error(`Error parseando resultado: ${parseError.message}`));
+        }
+      });
+
+      pythonProcess.on('error', (error) => {
+        this.logger.error('Error ejecutando automation interface:', error);
+        reject(error);
+      });
+    });
+  }
+
   async executeCustomPythonScript(scriptPath: string, args: string[] = []): Promise<any> {
     this.logger.log(`Ejecutando script personalizado: ${scriptPath}`);
     
