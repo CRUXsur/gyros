@@ -131,4 +131,80 @@ export class AutomationController {
       };
     }
   }
+
+  @Get('stats/daily')
+  @Auth()
+  async getDailyStats() {
+    try {
+      const stats = await this.automationService.getDailyStatistics();
+      return {
+        success: true,
+        stats,
+        message: 'Estadísticas diarias obtenidas exitosamente',
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        message: 'Error obteniendo estadísticas diarias',
+      };
+    }
+  }
+
+  @Get('stats/devices')
+  @Auth()
+  async getDeviceStats() {
+    try {
+      const stats = await this.automationService.getDeviceStatistics();
+      return {
+        success: true,
+        stats,
+        message: 'Estadísticas de dispositivos obtenidas exitosamente',
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        message: 'Error obteniendo estadísticas de dispositivos',
+      };
+    }
+  }
+
+  @Get('stats/performance')
+  @Auth(ValidRoles.admin)
+  async getPerformanceStats() {
+    try {
+      const stats = await this.automationService.getPerformanceStatistics();
+      return {
+        success: true,
+        stats,
+        message: 'Estadísticas de rendimiento obtenidas exitosamente',
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        message: 'Error obteniendo estadísticas de rendimiento',
+      };
+    }
+  }
+
+  @Get('health')
+  async getHealthCheck() {
+    try {
+      const health = await this.automationService.getSystemHealth();
+      return {
+        success: true,
+        health,
+        timestamp: new Date(),
+        message: 'Sistema operacional',
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        message: 'Error en verificación de salud del sistema',
+      };
+    }
+  }
 }

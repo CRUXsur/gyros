@@ -376,4 +376,247 @@ export class AutomationService {
     await this.hourlyDeviceCheck();
     return { message: 'Verificación programada ejecutada manualmente' };
   }
+
+  // ========================================
+  // MÉTODOS DE ESTADÍSTICAS AVANZADAS
+  // ========================================
+
+  async getDailyStatistics(): Promise<any> {
+    this.logger.log('📊 Generando estadísticas diarias...');
+    
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    const todayLogs = await this.automationLogRepository
+      .createQueryBuilder('log')
+      .where('log.timestamp >= :today AND log.timestamp < :tomorrow', {
+        today,
+        tomorrow,
+      })
+      .getMany();
+
+    const stats = {
+      date: today.toISOString().split('T')[0],
+      totalProcesses: todayLogs.length,
+      successfulProcesses: todayLogs.filter(log => log.success).length,
+      failedProcesses: todayLogs.filter(log => !log.success).length,
+      uniqueDevices: [...new Set(todayLogs.map(log => log.deviceId))].length,
+      processesPerHour: this.getProcessesPerHour(todayLogs),
+      actionBreakdown: this.getActionBreakdown(todayLogs),
+      errorTypes: this.getErrorTypes(todayLogs),
+    };
+
+    return stats;
+  }
+
+  async getDeviceStatistics(): Promise<any> {
+    this.logger.log('📱 Generando estadísticas de dispositivos...');
+    
+    const logs = await this.automationLogRepository
+      .createQueryBuilder('log')
+      .select(['log.deviceId', 'log.timestamp', 'log.success', 'log.action'])
+      .orderBy('log.timestamp', 'DESC')
+      .limit(1000)
+      .getMany();
+
+    const deviceStats = {};
+    
+    logs.forEach(log => {
+      if (!deviceStats[log.deviceId]) {
+        deviceStats[log.deviceId] = {
+          deviceId: log.deviceId,
+          totalProcesses: 0,
+          successfulProcesses: 0,
+          lastSeen: null,
+          actions: {},
+        };
+      }
+      
+      const device = deviceStats[log.deviceId];
+      device.totalProcesses++;
+      if (log.success) device.successfulProcesses++;
+      if (!device.lastSeen || log.timestamp > device.lastSeen) {
+        device.lastSeen = log.timestamp;
+      }
+      
+      device.actions[log.action] = (device.actions[log.action] || 0) + 1;
+    });
+
+    return {
+      totalDevices: Object.keys(deviceStats).length,
+      devices: Object.values(deviceStats),
+      mostActiveDevice: this.getMostActiveDevice(deviceStats),
+    };
+  }
+
+  async getPerformanceStatistics(): Promise<any> {
+    this.logger.log('⚡ Generando estadísticas de rendimiento...');
+    
+    const last7Days = new Date();
+    last7Days.setDate(last7Days.getDate() - 7);
+    
+    const recentLogs = await this.automationLogRepository
+      .createQueryBuilder('log')
+      .where('log.timestamp >= :date', { date: last7Days })
+      .orderBy('log.timestamp', 'DESC')
+      .getMany();
+
+    const performanceStats = {
+      period: '7 days',
+      totalProcesses: recentLogs.length,
+      averageProcessesPerDay: recentLogs.length / 7,
+      successRate: this.calculateSuccessRate(recentLogs),
+      processingTimes: this.estimateProcessingTimes(recentLogs),
+      peakHours: this.getPeakHours(recentLogs),
+      reliability: this.calculateReliability(recentLogs),
+    };
+
+    return performanceStats;
+  }
+
+  async getSystemHealth(): Promise<any> {
+    this.logger.log('🏥 Verificando salud del sistema...');
+    
+    try {
+      // Verificar base de datos
+      const dbCheck = await this.automationLogRepository.count();
+      
+      // Verificar últimos procesos
+      const lastProcess = await this.automationLogRepository
+        .createQueryBuilder('log')
+        .orderBy('log.timestamp', 'DESC')
+        .limit(1)
+        .getOne();
+
+      // Verificar Python/Robot (simulado)
+      const pythonCheck = await this.pythonExecutorService.executeAutomationInterface('check_device')
+        .then(() => true)
+        .catch(() => false);
+
+      return {
+        database: {
+          status: dbCheck >= 0 ? 'healthy' : 'error',
+          totalLogs: dbCheck,
+        },
+        automation: {
+          status: lastProcess ? 'active' : 'inactive',
+          lastProcess: lastProcess?.timestamp,
+          lastSuccess: lastProcess?.success,
+        },
+        pythonRobot: {
+          status: pythonCheck ? 'healthy' : 'error',
+          message: pythonCheck ? 'Python/Robot operacional' : 'Error en Python/Robot',
+        },
+        systemStatus: (dbCheck >= 0 && pythonCheck) ? 'healthy' : 'degraded',
+      };
+    } catch (error) {
+      this.logger.error('Error en verificación de salud:', error);
+      return {
+        systemStatus: 'error',
+        error: error.message,
+      };
+    }
+  }
+
+  // ========================================
+  // MÉTODOS AUXILIARES PARA ESTADÍSTICAS
+  // ========================================
+
+  private getProcessesPerHour(logs: any[]): any {
+    const hourlyData = {};
+    
+    logs.forEach(log => {
+      const hour = new Date(log.timestamp).getHours();
+      hourlyData[hour] = (hourlyData[hour] || 0) + 1;
+    });
+
+    return hourlyData;
+  }
+
+  private getActionBreakdown(logs: any[]): any {
+    const actions = {};
+    
+    logs.forEach(log => {
+      actions[log.action] = (actions[log.action] || 0) + 1;
+    });
+
+    return actions;
+  }
+
+  private getErrorTypes(logs: any[]): any {
+    const errors = {};
+    
+    logs.filter(log => !log.success).forEach(log => {
+      const errorType = log.result?.error || 'Unknown error';
+      errors[errorType] = (errors[errorType] || 0) + 1;
+    });
+
+    return errors;
+  }
+
+  private getMostActiveDevice(deviceStats: any): any {
+    const devices = Object.values(deviceStats) as any[];
+    return devices.sort((a, b) => b.totalProcesses - a.totalProcesses)[0] || null;
+  }
+
+  private calculateSuccessRate(logs: any[]): number {
+    if (logs.length === 0) return 0;
+    const successful = logs.filter(log => log.success).length;
+    return Math.round((successful / logs.length) * 100 * 100) / 100; // 2 decimales
+  }
+
+  private estimateProcessingTimes(logs: any[]): any {
+    // Simulación de tiempos de procesamiento basado en tipos de acción
+    const timeEstimates = {
+      'check_device': 1.2,
+      'execute_robot_action': 3.5,
+      'toggle_prestamo_status': 0.8,
+      'hourly_device_check': 2.1,
+    };
+
+    const breakdown = {};
+    logs.forEach(log => {
+      breakdown[log.action] = timeEstimates[log.action] || 2.0;
+    });
+
+    const values = Object.values(breakdown) as number[];
+    return {
+      averageTime: values.length > 0 ? values.reduce((a, b) => a + b, 0) / values.length : 0,
+      byAction: breakdown,
+    };
+  }
+
+  private getPeakHours(logs: any[]): any {
+    const hourlyActivity = this.getProcessesPerHour(logs);
+    const sortedHours = Object.entries(hourlyActivity)
+      .sort(([,a], [,b]) => (b as number) - (a as number))
+      .slice(0, 3);
+
+    return {
+      peakHour: sortedHours[0] ? `${sortedHours[0][0]}:00` : 'N/A',
+      top3Hours: sortedHours.map(([hour, count]) => ({
+        hour: `${hour}:00`,
+        processes: count,
+      })),
+    };
+  }
+
+  private calculateReliability(logs: any[]): any {
+    const last24h = logs.filter(log => {
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      return new Date(log.timestamp) >= yesterday;
+    });
+
+    return {
+      last24Hours: {
+        totalProcesses: last24h.length,
+        successRate: this.calculateSuccessRate(last24h),
+        status: this.calculateSuccessRate(last24h) >= 95 ? 'excellent' : 
+               this.calculateSuccessRate(last24h) >= 80 ? 'good' : 'needs_attention',
+      },
+    };
+  }
 }
