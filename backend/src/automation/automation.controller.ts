@@ -207,4 +207,32 @@ export class AutomationController {
       };
     }
   }
+
+  // ------------------------------------------------------------------------------------------------
+  // ... existing code ...
+
+  @Post('execute-robot-script')
+  @Auth()
+  @HttpCode(HttpStatus.OK)
+  async executeRobotScript(@GetUser() user: User) {
+    try {
+      const result = await this.automationService.executeRobotScript('Add_Note_Test.robot');
+      
+      return {
+        success: true,
+        result,
+        message: 'Script de Robot Framework ejecutado exitosamente',
+      };
+      
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        message: 'Error ejecutando script de Robot Framework',
+      };
+    }
+  } 
 }
+
+
+

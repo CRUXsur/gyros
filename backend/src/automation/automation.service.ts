@@ -619,4 +619,76 @@ export class AutomationService {
       },
     };
   }
+// ... existing code ...
+
+  /**
+   * Ejecuta un script de Robot Framework
+   * @param scriptName Nombre del script .robot a ejecutar
+   * @returns Resultado de la ejecución
+   */
+  async executeRobotScript(scriptName: string): Promise<any> {
+    this.logger.log(`Ejecutando script de Robot Framework: ${scriptName}`);
+    
+    try {
+      const { spawn } = require('child_process');
+      const path = require('path');
+      
+      // Ruta al directorio robot
+      const robotPath = path.join(process.cwd(), '..', 'robot');
+      const scriptPath = path.join(robotPath, 'Test', scriptName);
+      
+      this.logger.log(`Ruta del script: ${scriptPath}`);
+      
+      return new Promise((resolve, reject) => {
+        // Ejecutar robot con el script
+        const robotProcess = spawn('robot', [scriptPath], {
+          cwd: robotPath,
+          stdio: ['pipe', 'pipe', 'pipe']
+        });
+        
+        let stdout = '';
+        let stderr = '';
+        
+        robotProcess.stdout.on('data', (data) => {
+          stdout += data.toString();
+          this.logger.log(`Robot stdout: ${data.toString()}`);
+        });
+        
+        robotProcess.stderr.on('data', (data) => {
+          stderr += data.toString();
+          this.logger.error(`Robot stderr: ${data.toString()}`);
+        });
+        
+        robotProcess.on('close', (code) => {
+          this.logger.log(`Robot process exited with code: ${code}`);
+          
+          const result = {
+            success: code === 0,
+            exitCode: code,
+            stdout: stdout,
+            stderr: stderr,
+            scriptName: scriptName,
+            timestamp: new Date(),
+            message: code === 0 ? 'Script ejecutado exitosamente' : 'Script falló en la ejecución'
+          };
+          
+          // Log del resultado en la base de datos
+//          this.logAutomationAction('execute_robot_script', result, null);
+          
+          resolve(result);
+        });
+        
+        robotProcess.on('error', (error) => {
+          this.logger.error(`Error ejecutando Robot Framework: ${error.message}`);
+          reject(new Error(`Error ejecutando Robot Framework: ${error.message}`));
+        });
+      });
+      
+    } catch (error) {
+      this.logger.error(`Error en executeRobotScript: ${error.message}`);
+      throw new Error(`Error ejecutando script de Robot Framework: ${error.message}`);
+    }
+  }
 }
+
+
