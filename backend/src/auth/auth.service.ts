@@ -47,7 +47,7 @@ export class AuthService {
     const {password, email} = loginUserDto;
     const user = await this.userRepository.findOne({ 
       where: { email },
-      select: { email: true, password: true, id: true }
+      select: { email: true, password: true, id: true, fullName: true }
     });
 
     if (!user) 
@@ -56,11 +56,19 @@ export class AuthService {
     if (!bcrypt.compareSync(password, user.password)) 
       throw new UnauthorizedException('Credentials are not valid (password)');
     
-    // const { password: userPassword, ...userWithoutPassword } = user;
-    console.log(user);
+    // Retornar respuesta estructurada sin password
+    const { password: userPassword, ...userWithoutPassword } = user;
+    console.log('Login successful for user:', userWithoutPassword);
+    
     return {
-      ...user,
-      token: this.getJwtToken({ id: user.id })
+      success: true,
+      token: this.getJwtToken({ id: user.id }),
+      user: {
+        id: user.id,
+        email: user.email,
+        fullName: user.fullName
+      },
+      message: 'Login exitoso'
     }
   }
 
