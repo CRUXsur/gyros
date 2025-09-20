@@ -50,6 +50,15 @@ export class ClientesService {
     return cliente;
   }
 
+  async findByDeviceId(device_id: string) {
+    const cliente = await this.clienteRepository.findOneBy({device_id});
+    
+    if(!cliente) {
+      throw new NotFoundException(`Cliente con device_id ${device_id} no encontrado`);
+    }
+    return cliente;
+  }
+
   async update(id_cliente: string, updateClienteDto: UpdateClienteDto) {
     try {
       // Verificar que el cliente existe
