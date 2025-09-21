@@ -25,6 +25,21 @@
     ```
 7. levantar ``` yarn start:dev ```    
 
+## Robot
+```python test_device_detection.py```
+```robot Test/Device_Detection_Test.robot```
+
+```robot Test/Add_Note_Test.robot```
+
+```python3 test_device_detection.py```
+
+
+## Endpoints
+```✅ GET /api/automation/status ```
+```✅ GET /api/automation/check-device-id ```
+```✅ POST /api/automation/start-process ```
+```✅ GET /api/automation/history ```
+```✅ POST /api/automation/trigger-scheduled-check ```
 
 
 ## Robot - Automatizacion Python
