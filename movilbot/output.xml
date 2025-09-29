@@ -1,0 +1,612 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.1 (Python 3.12.6 on darwin)" generated="2025-09-29T14:34:26.079787" rpa="false" schemaversion="5">
+<suite id="s1" name="Transfer" source="/Users/mark/Desktop/WorkSpace/gyros/movilbot/transfer.robot">
+<kw name="BeforeSuite" owner="Base" type="SETUP">
+<kw name="Detect And Validate Connected Device" owner="Base">
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-09-29T14:34:26.140416" level="INFO">====================================================</msg>
+<arg>====================================================</arg>
+<arg>CONSOLE</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-09-29T14:34:26.140345" elapsed="0.000098"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-09-29T14:34:26.140555" level="INFO">🚀 INICIANDO DETECCIÓN DE DISPOSITIVO</msg>
+<arg>🚀 INICIANDO DETECCIÓN DE DISPOSITIVO</arg>
+<arg>CONSOLE</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-09-29T14:34:26.140506" elapsed="0.000067"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-09-29T14:34:26.140662" level="INFO">====================================================</msg>
+<arg>====================================================</arg>
+<arg>CONSOLE</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-09-29T14:34:26.140619" elapsed="0.000058"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-09-29T14:34:26.140751" level="INFO">📱 Paso 1: Detectando dispositivo USB conectado...</msg>
+<arg>📱 Paso 1: Detectando dispositivo USB conectado...</arg>
+<arg>CONSOLE</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-09-29T14:34:26.140716" elapsed="0.000048"/>
+</kw>
+<kw name="Get Connected Device Id" owner="Utility">
+<msg time="2025-09-29T14:34:26.153772" level="INFO">============================================================
+🔍 INICIANDO DETECCIÓN DE DISPOSITIVOS USB
+============================================================
+📱 Ejecutando comando: adb devices
+📤 Salida del comando ADB:
+   Return code: 0
+   Stdout: 'List of devices attached\nNBA34BOAC5036471\tdevice\n\n'
+📋 Analizando 2 líneas de salida:
+   Línea 0: 'List of devices attached'
+   Línea 1: 'NBA34BOAC5036471	device'
+
+🔎 Buscando dispositivos conectados:
+   Procesando línea 1: 'NBA34BOAC5036471	device'
+   ✅ Dispositivo encontrado: 'NBA34BOAC5036471'
+
+📊 RESUMEN DE DETECCIÓN:
+   Total dispositivos encontrados: 1
+   Dispositivo 1: NBA34BOAC5036471
+
+🎯 DISPOSITIVO SELECCIONADO: NBA34BOAC5036471
+============================================================</msg>
+<msg time="2025-09-29T14:34:26.153965" level="INFO">${detected_device_id} = NBA34BOAC5036471</msg>
+<var>${detected_device_id}</var>
+<doc>Obtiene el device_id del primer dispositivo Android conectado via USB usando ADB.</doc>
+<status status="PASS" start="2025-09-29T14:34:26.140803" elapsed="0.013177"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-09-29T14:34:26.154340" level="INFO">📋 Paso 2: Configurando variables globales...</msg>
+<arg>📋 Paso 2: Configurando variables globales...</arg>
+<arg>CONSOLE</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-09-29T14:34:26.154171" elapsed="0.000186"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-09-29T14:34:26.154487" level="INFO">🔹 DEVICE_UDID configurado como: NBA34BOAC5036471</msg>
+<arg>🔹 DEVICE_UDID configurado como: ${detected_device_id}</arg>
+<arg>CONSOLE</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-09-29T14:34:26.154404" elapsed="0.000099"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-09-29T14:34:26.154602" level="INFO">🔹 DEVICE_NAME configurado como: NBA34BOAC5036471</msg>
+<arg>🔹 DEVICE_NAME configurado como: ${detected_device_id}</arg>
+<arg>CONSOLE</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-09-29T14:34:26.154545" elapsed="0.000070"/>
+</kw>
+<kw name="Set Global Variable" owner="BuiltIn">
+<msg time="2025-09-29T14:34:26.154783" level="INFO">${DEVICE_UDID} = NBA34BOAC5036471</msg>
+<arg>${DEVICE_UDID}</arg>
+<arg>${detected_device_id}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="PASS" start="2025-09-29T14:34:26.154677" elapsed="0.000119"/>
+</kw>
+<kw name="Set Global Variable" owner="BuiltIn">
+<msg time="2025-09-29T14:34:26.154899" level="INFO">${DEVICE_NAME} = NBA34BOAC5036471</msg>
+<arg>${DEVICE_NAME}</arg>
+<arg>${detected_device_id}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="PASS" start="2025-09-29T14:34:26.154837" elapsed="0.000074"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-09-29T14:34:26.154982" level="INFO">🔍 Paso 3: Validando conexión del dispositivo...</msg>
+<arg>🔍 Paso 3: Validando conexión del dispositivo...</arg>
+<arg>CONSOLE</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-09-29T14:34:26.154947" elapsed="0.000049"/>
+</kw>
+<kw name="Validate Device Connection" owner="Utility">
+<msg time="2025-09-29T14:34:26.168178" level="INFO">🔍 VALIDANDO CONEXIÓN DEL DISPOSITIVO: NBA34BOAC5036471
+--------------------------------------------------
+📱 Ejecutando comando: adb -s NBA34BOAC5036471 get-state
+📤 Resultado del comando:
+   Return code: 0
+   Estado reportado: 'device'
+✅ VALIDACIÓN EXITOSA
+   Dispositivo NBA34BOAC5036471 está en estado 'device' y listo para usar
+--------------------------------------------------</msg>
+<arg>${DEVICE_UDID}</arg>
+<doc>Valida que el dispositivo especificado esté conectado y accesible.</doc>
+<status status="PASS" start="2025-09-29T14:34:26.155037" elapsed="0.013324"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-09-29T14:34:26.168799" level="INFO">📊 Paso 4: Obteniendo información detallada...</msg>
+<arg>📊 Paso 4: Obteniendo información detallada...</arg>
+<arg>CONSOLE</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-09-29T14:34:26.168607" elapsed="0.000211"/>
+</kw>
+<kw name="Get Device Info" owner="Utility">
+<msg time="2025-09-29T14:34:26.418969" level="INFO">📋 OBTENIENDO INFORMACIÓN DETALLADA DEL DISPOSITIVO: NBA34BOAC5036471
+============================================================
+🔍 Consultando propiedades del dispositivo:
+
+   📱 Obteniendo Modelo (getprop ro.product.model)...
+      Return code: 0
+      Salida raw: ''ZTE Blade A34\n''
+      ✅ Modelo: ZTE Blade A34
+
+   📱 Obteniendo Versión Android (getprop ro.build.version.release)...
+      Return code: 0
+      Salida raw: ''13\n''
+      ✅ Versión Android: 13
+
+   📱 Obteniendo Marca (getprop ro.product.brand)...
+      Return code: 0
+      Salida raw: ''ZTE\n''
+      ✅ Marca: ZTE
+
+   📱 Obteniendo Fabricante (getprop ro.product.manufacturer)...
+      Return code: 0
+      Salida raw: ''ZTE\n''
+      ✅ Fabricante: ZTE
+
+   📱 Obteniendo API Level (getprop ro.build.version.sdk)...
+      Return code: 0
+      Salida raw: ''33\n''
+      ✅ API Level: 33
+
+📊 RESUMEN COMPLETO DEL DISPOSITIVO:
+============================================================
+🔹 Device ID:      NBA34BOAC5036471
+🔹 Marca:          ZTE
+🔹 Fabricante:     ZTE
+🔹 Modelo:         ZTE Blade A34
+🔹 Android:        13
+🔹 API Level:      33
+============================================================</msg>
+<msg time="2025-09-29T14:34:26.419252" level="INFO">${device_info} = {'device_id': 'NBA34BOAC5036471', 'model': 'ZTE Blade A34', 'android_version': '13', 'brand': 'ZTE', 'manufacturer': 'ZTE', 'api_level': '33'}</msg>
+<var>${device_info}</var>
+<arg>${DEVICE_UDID}</arg>
+<doc>Obtiene información detallada del dispositivo especificado.</doc>
+<status status="PASS" start="2025-09-29T14:34:26.168871" elapsed="0.250403"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-09-29T14:34:26.419735" level="INFO">====================================================</msg>
+<arg>====================================================</arg>
+<arg>CONSOLE</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-09-29T14:34:26.419518" elapsed="0.000242"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-09-29T14:34:26.419974" level="INFO">✅ DETECCIÓN COMPLETADA EXITOSAMENTE</msg>
+<arg>✅ DETECCIÓN COMPLETADA EXITOSAMENTE</arg>
+<arg>CONSOLE</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-09-29T14:34:26.419899" elapsed="0.000099"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-09-29T14:34:26.420144" level="INFO">🎯 Dispositivo listo: NBA34BOAC5036471</msg>
+<arg>🎯 Dispositivo listo: ${DEVICE_UDID}</arg>
+<arg>CONSOLE</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-09-29T14:34:26.420056" elapsed="0.000109"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-09-29T14:34:26.420274" level="INFO">====================================================</msg>
+<arg>====================================================</arg>
+<arg>CONSOLE</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-09-29T14:34:26.420218" elapsed="0.000270"/>
+</kw>
+<doc>Detecta automáticamente el dispositivo Android conectado por USB y valida la conexión</doc>
+<status status="PASS" start="2025-09-29T14:34:26.140111" elapsed="0.280443"/>
+</kw>
+<kw name="Start Appium Server" owner="AppiumManager">
+<msg time="2025-09-29T14:34:31.428978" level="INFO">Starting Appium Server with args : -p 4723</msg>
+<arg>${APPIUM-PORT}</arg>
+<status status="PASS" start="2025-09-29T14:34:26.420611" elapsed="5.009432"/>
+</kw>
+<kw name="Open Uni Movil Plus App" owner="AppHelper">
+<kw name="Open Application" owner="AppiumLibrary">
+<arg>http://localhost:${APPIUM-PORT}</arg>
+<arg>platformName=Android</arg>
+<arg>platformVersion=${PLATFORM_VERSION}</arg>
+<arg>deviceName=${DEVICE_NAME}</arg>
+<arg>automationName=uiautomator2</arg>
+<arg>appPackage=com.bancounion.unimovilplus</arg>
+<arg>appActivity=com.bancounion.unimovil.activity.SplashActivity</arg>
+<doc>Opens a new application to given Appium server.
+Capabilities of appium server, Android and iOS,
+Please check https://appium.io/docs/en/2.1/cli/args/
+| *Option*            | *Man.* | *Description*     |
+| remote_url          | Yes    | Appium server url |
+| alias               | no     | alias             |
+| strict_ssl          | No     | allows you to send commands to an invalid certificate host like a self-signed one. |</doc>
+<status status="PASS" start="2025-09-29T14:34:31.433677" elapsed="8.080583"/>
+</kw>
+<arg>${APPIUM-PORT}</arg>
+<arg>${DEVICE_UDID}</arg>
+<arg>${DEVICE_NAME}</arg>
+<arg>${PLATFORM_VERSION}</arg>
+<status status="PASS" start="2025-09-29T14:34:31.431853" elapsed="8.082630"/>
+</kw>
+<arg>GIROS_PAGO_DEVOLUCION</arg>
+<status status="PASS" start="2025-09-29T14:34:26.139907" elapsed="13.374652"/>
+</kw>
+<test id="s1-t1" name="GirosPagosDevolucionesClientes" line="22">
+<kw name="BeforeTest" owner="Base" type="SETUP">
+<kw name="Launch Uni Movil Plus" owner="AppHelper">
+<kw name="Activate Application" owner="AppiumLibrary">
+<arg>com.bancounion.unimovilplus</arg>
+<doc>Activates the application if it is not running or is running in the background.
+Args:
+ - app_id - BundleId for iOS. Package name for Android.</doc>
+<status status="PASS" start="2025-09-29T14:34:39.515977" elapsed="0.216463"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2025-09-29T14:34:45.831750" level="INFO">xpath criteria: //android.widget.Button[@resource-id="com.bancounion.unimovilplus:id/" and @text="OK"]
+xpath criteria: //android.widget.Button[@resource-id="com.bancounion.unimovilplus:id/" and @text="OK"]</msg>
+<arg>${PERMISO}</arg>
+<doc>Waits until element specified with `locator` is visible.</doc>
+<status status="PASS" start="2025-09-29T14:34:39.732757" elapsed="6.099113"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2025-09-29T14:34:45.833491" level="INFO">Clicking element '//android.widget.Button[@resource-id="com.bancounion.unimovilplus:id/" and @text="OK"]'.</msg>
+<msg time="2025-09-29T14:34:46.171833" level="INFO">xpath criteria: //android.widget.Button[@resource-id="com.bancounion.unimovilplus:id/" and @text="OK"]</msg>
+<arg>${PERMISO}</arg>
+<doc>Click element identified by `locator`.</doc>
+<status status="PASS" start="2025-09-29T14:34:45.832126" elapsed="0.339840"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2025-09-29T14:34:48.215398" level="INFO">xpath criteria: //android.widget.Button[@resource-id="com.android.permissioncontroller:id/permission_allow_button"]
+xpath criteria: //android.widget.Button[@resource-id="com.android.permissioncontroller:id/permission_allow_button"]</msg>
+<arg>${PERMITIR}</arg>
+<doc>Waits until element specified with `locator` is visible.</doc>
+<status status="PASS" start="2025-09-29T14:34:46.172237" elapsed="2.043301"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2025-09-29T14:34:48.217359" level="INFO">Clicking element '//android.widget.Button[@resource-id="com.android.permissioncontroller:id/permission_allow_button"]'.</msg>
+<msg time="2025-09-29T14:34:48.489525" level="INFO">xpath criteria: //android.widget.Button[@resource-id="com.android.permissioncontroller:id/permission_allow_button"]</msg>
+<arg>${PERMITIR}</arg>
+<doc>Click element identified by `locator`.</doc>
+<status status="PASS" start="2025-09-29T14:34:48.215826" elapsed="0.274028"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2025-09-29T14:34:49.924814" level="INFO">xpath criteria: //android.widget.EditText[@resource-id="com.bancounion.unimovilplus:id/"]</msg>
+<arg>${INGRESE_USUARIO}</arg>
+<doc>Waits until element specified with `locator` is visible.</doc>
+<status status="PASS" start="2025-09-29T14:34:48.490646" elapsed="1.434333"/>
+</kw>
+<status status="PASS" start="2025-09-29T14:34:39.515778" elapsed="10.409353"/>
+</kw>
+<status status="PASS" start="2025-09-29T14:34:39.515475" elapsed="10.409716"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-09-29T14:34:49.926089" level="INFO">🚀 INICIAMOS SCRIPT GIROS_PAGO_DEVOLUCION</msg>
+<arg>🚀 INICIAMOS SCRIPT GIROS_PAGO_DEVOLUCION</arg>
+<arg>CONSOLE</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-09-29T14:34:49.925693" elapsed="0.000455"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-09-29T14:34:49.926456" level="INFO">=========================================</msg>
+<arg>=========================================</arg>
+<arg>CONSOLE</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-09-29T14:34:49.926317" elapsed="0.000180"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-09-29T14:34:49.926743" level="INFO">==========================================</msg>
+<arg>==========================================</arg>
+<arg>CONSOLE</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-09-29T14:34:49.926634" elapsed="0.000149"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-09-29T14:34:49.927016" level="INFO">🧪 INICIANDO : Giros Pagos Devoluciones</msg>
+<arg>🧪 INICIANDO : Giros Pagos Devoluciones</arg>
+<arg>CONSOLE</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-09-29T14:34:49.926911" elapsed="0.000148"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-09-29T14:34:49.927301" level="INFO">==========================================</msg>
+<arg>==========================================</arg>
+<arg>CONSOLE</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-09-29T14:34:49.927197" elapsed="0.000145"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-09-29T14:34:49.927574" level="INFO">🔍 Verificando configuración del dispositivo...</msg>
+<arg>🔍 Verificando configuración del dispositivo...</arg>
+<arg>CONSOLE</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-09-29T14:34:49.927467" elapsed="0.000145"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-09-29T14:34:49.928164" level="INFO">📱 Device UDID: NBA34BOAC5036471</msg>
+<arg>📱 Device UDID: ${DEVICE_UDID}</arg>
+<arg>CONSOLE</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-09-29T14:34:49.927733" elapsed="0.000476"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-09-29T14:34:49.928486" level="INFO">📱 Device NAME: NBA34BOAC5036471</msg>
+<arg>📱 Device NAME: ${DEVICE_NAME}</arg>
+<arg>CONSOLE</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-09-29T14:34:49.928349" elapsed="0.000583"/>
+</kw>
+<kw name="Should Not Be Empty" owner="BuiltIn">
+<msg time="2025-09-29T14:34:49.929354" level="INFO">Length is 16.</msg>
+<arg>${DEVICE_UDID}</arg>
+<arg>msg=Device ID no puede estar vacío</arg>
+<doc>Verifies that the given item is not empty.</doc>
+<status status="PASS" start="2025-09-29T14:34:49.929115" elapsed="0.000279"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-09-29T14:34:49.929638" level="INFO">✅ Dispositivo válido confirmado</msg>
+<arg>✅ Dispositivo válido confirmado</arg>
+<arg>CONSOLE</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-09-29T14:34:49.929530" elapsed="0.000149"/>
+</kw>
+<kw name="Should Not Be Empty" owner="BuiltIn">
+<msg time="2025-09-29T14:34:49.929968" level="INFO">Length is 8.</msg>
+<arg>${usuario}</arg>
+<arg>msg=Variable 'usuario' es requerida. Use: -v usuario:valor</arg>
+<doc>Verifies that the given item is not empty.</doc>
+<status status="PASS" start="2025-09-29T14:34:49.929816" elapsed="0.000190"/>
+</kw>
+<kw name="Should Not Be Empty" owner="BuiltIn">
+<msg time="2025-09-29T14:34:49.930273" level="INFO">Length is 11.</msg>
+<arg>${password}</arg>
+<arg>msg=Variable 'password' es requerida. Use: -v password:valor</arg>
+<doc>Verifies that the given item is not empty.</doc>
+<status status="PASS" start="2025-09-29T14:34:49.930137" elapsed="0.000170"/>
+</kw>
+<kw name="Should Not Be Empty" owner="BuiltIn">
+<msg time="2025-09-29T14:34:49.931041" level="INFO">Length is 1.</msg>
+<arg>${bs}</arg>
+<arg>msg=Variable 'bs' es requerida. Use: -v bs:valor</arg>
+<doc>Verifies that the given item is not empty.</doc>
+<status status="PASS" start="2025-09-29T14:34:49.930646" elapsed="0.000468"/>
+</kw>
+<kw name="Should Not Be Empty" owner="BuiltIn">
+<msg time="2025-09-29T14:34:49.931508" level="INFO">Length is 8.</msg>
+<arg>${glosa}</arg>
+<arg>msg=Variable 'glosa' es requerida. Use: -v glosa:valor</arg>
+<doc>Verifies that the given item is not empty.</doc>
+<status status="PASS" start="2025-09-29T14:34:49.931359" elapsed="0.000185"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-09-29T14:34:49.931838" level="INFO">🔹 Usuario: 3136202m</msg>
+<arg>🔹 Usuario: ${usuario}</arg>
+<arg>CONSOLE</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-09-29T14:34:49.931680" elapsed="0.000198"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-09-29T14:34:49.932099" level="INFO">🔹 Password:</msg>
+<arg>🔹 Password:</arg>
+<arg>CONSOLE</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-09-29T14:34:49.931998" elapsed="0.000135"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-09-29T14:34:49.932392" level="INFO">🔹 Bs: 1</msg>
+<arg>🔹 Bs: ${bs}</arg>
+<arg>CONSOLE</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-09-29T14:34:49.932269" elapsed="0.000156"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-09-29T14:34:49.932647" level="INFO">🔹 Glosa: 25092025</msg>
+<arg>🔹 Glosa: ${glosa}</arg>
+<arg>CONSOLE</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-09-29T14:34:49.932531" elapsed="0.000150"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-09-29T14:34:49.932914" level="INFO">🚀 Iniciando Giros en dispositivo NBA34BOAC5036471...</msg>
+<arg>🚀 Iniciando Giros en dispositivo ${DEVICE_UDID}...</arg>
+<arg>CONSOLE</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-09-29T14:34:49.932790" elapsed="0.000157"/>
+</kw>
+<kw name="Pago Devolucion" owner="PagoDevolucionHelper">
+<kw name="LoginPage.Enter_usuario" owner="LoginPage">
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2025-09-29T14:34:50.904276" level="INFO">xpath criteria: //android.widget.EditText[@resource-id="com.bancounion.unimovilplus:id/"]</msg>
+<arg>${USUARIO_TEXT_BOX}</arg>
+<doc>Waits until element specified with `locator` is visible.</doc>
+<status status="PASS" start="2025-09-29T14:34:49.933843" elapsed="0.970587"/>
+</kw>
+<kw name="Input Text" owner="AppiumLibrary">
+<msg time="2025-09-29T14:34:50.906524" level="INFO">Typing text '3136202m' into text field '//android.widget.EditText[@resource-id="com.bancounion.unimovilplus:id/"]'</msg>
+<msg time="2025-09-29T14:34:52.459497" level="INFO">xpath criteria: //android.widget.EditText[@resource-id="com.bancounion.unimovilplus:id/"]</msg>
+<arg>${USUARIO_TEXT_BOX}</arg>
+<arg>${USUARIO}</arg>
+<doc>Types the given `text` into text field identified by `locator`.</doc>
+<status status="PASS" start="2025-09-29T14:34:50.904760" elapsed="1.554823"/>
+</kw>
+<arg>${USUARIO}</arg>
+<status status="PASS" start="2025-09-29T14:34:49.933623" elapsed="2.526048"/>
+</kw>
+<kw name="LoginPage.Click_Iniciar_Sesion_Btn" owner="LoginPage">
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2025-09-29T14:34:53.834712" level="INFO">xpath criteria: //android.widget.Button[@resource-id="com.bancounion.unimovilplus:id/"]</msg>
+<arg>${INICIAR_SESION}</arg>
+<doc>Waits until element specified with `locator` is visible.</doc>
+<status status="PASS" start="2025-09-29T14:34:52.460142" elapsed="1.374816"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2025-09-29T14:34:53.838128" level="INFO">Clicking element '//android.widget.Button[@resource-id="com.bancounion.unimovilplus:id/"]'.</msg>
+<msg time="2025-09-29T14:34:54.326373" level="INFO">xpath criteria: //android.widget.Button[@resource-id="com.bancounion.unimovilplus:id/"]</msg>
+<arg>${INICIAR_SESION}</arg>
+<doc>Click element identified by `locator`.</doc>
+<status status="PASS" start="2025-09-29T14:34:53.835477" elapsed="0.491188"/>
+</kw>
+<status status="PASS" start="2025-09-29T14:34:52.459884" elapsed="1.867075"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2025-09-29T14:34:55.328612" level="INFO">Slept 1 second.</msg>
+<arg>1s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2025-09-29T14:34:54.327509" elapsed="1.001696"/>
+</kw>
+<kw name="LoginPage.Click_Permitir_Notificacion" owner="LoginPage">
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2025-09-29T14:34:57.534426" level="INFO">xpath criteria: //android.widget.Button[@resource-id="com.android.permissioncontroller:id/permission_allow_button"]
+xpath criteria: //android.widget.Button[@resource-id="com.android.permissioncontroller:id/permission_allow_button"]</msg>
+<arg>${PERMITIRnot}</arg>
+<doc>Waits until element specified with `locator` is visible.</doc>
+<status status="PASS" start="2025-09-29T14:34:55.331754" elapsed="2.203028"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2025-09-29T14:34:57.539751" level="INFO">Clicking element '//android.widget.Button[@resource-id="com.android.permissioncontroller:id/permission_allow_button"]'.</msg>
+<msg time="2025-09-29T14:34:57.807903" level="INFO">xpath criteria: //android.widget.Button[@resource-id="com.android.permissioncontroller:id/permission_allow_button"]</msg>
+<arg>${PERMITIRnot}</arg>
+<doc>Click element identified by `locator`.</doc>
+<status status="PASS" start="2025-09-29T14:34:57.535502" elapsed="0.272611"/>
+</kw>
+<status status="PASS" start="2025-09-29T14:34:55.330638" elapsed="2.477756"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2025-09-29T14:34:58.811044" level="INFO">Slept 1 second.</msg>
+<arg>1s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2025-09-29T14:34:57.808815" elapsed="1.002769"/>
+</kw>
+<kw name="LoginPage.CheckBox_Ok" owner="LoginPage">
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2025-09-29T14:34:59.551903" level="INFO">xpath criteria: //android.widget.CheckBox[@resource-id="com.bancounion.unimovilplus:id/"]</msg>
+<arg>${FRASE}</arg>
+<doc>Waits until element specified with `locator` is visible.</doc>
+<status status="PASS" start="2025-09-29T14:34:58.814228" elapsed="0.738125"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2025-09-29T14:34:59.555816" level="INFO">Clicking element '//android.widget.CheckBox[@resource-id="com.bancounion.unimovilplus:id/"]'.</msg>
+<msg time="2025-09-29T14:34:59.918458" level="INFO">xpath criteria: //android.widget.CheckBox[@resource-id="com.bancounion.unimovilplus:id/"]</msg>
+<arg>${FRASE}</arg>
+<doc>Click element identified by `locator`.</doc>
+<status status="PASS" start="2025-09-29T14:34:59.553148" elapsed="0.365506"/>
+</kw>
+<status status="PASS" start="2025-09-29T14:34:58.813231" elapsed="1.105606"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2025-09-29T14:35:00.921136" level="INFO">Slept 1 second.</msg>
+<arg>1s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2025-09-29T14:34:59.919269" elapsed="1.002401"/>
+</kw>
+<kw name="LoginPage.Enter_password" owner="LoginPage">
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2025-09-29T14:35:01.295550" level="INFO">xpath criteria: //android.widget.EditText[@resource-id="com.bancounion.unimovilplus:id/"]</msg>
+<arg>${PASSWORD_TEXT_BOX}</arg>
+<doc>Waits until element specified with `locator` is visible.</doc>
+<status status="PASS" start="2025-09-29T14:35:00.924030" elapsed="0.371875"/>
+</kw>
+<kw name="Input Text" owner="AppiumLibrary">
+<msg time="2025-09-29T14:35:01.298320" level="INFO">Typing text 'Andres2013.' into text field '//android.widget.EditText[@resource-id="com.bancounion.unimovilplus:id/"]'</msg>
+<msg time="2025-09-29T14:35:03.308412" level="INFO">xpath criteria: //android.widget.EditText[@resource-id="com.bancounion.unimovilplus:id/"]</msg>
+<arg>${PASSWORD_TEXT_BOX}</arg>
+<arg>${PASSWORD}</arg>
+<doc>Types the given `text` into text field identified by `locator`.</doc>
+<status status="PASS" start="2025-09-29T14:35:01.296231" elapsed="2.012540"/>
+</kw>
+<arg>${PASSWORD}</arg>
+<status status="PASS" start="2025-09-29T14:35:00.922836" elapsed="2.386350"/>
+</kw>
+<kw name="LoginPage.Click_Btn_Inicio" owner="LoginPage">
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2025-09-29T14:35:04.093189" level="INFO">xpath criteria: //android.widget.Button[@resource-id="com.bancounion.unimovilplus:id/" and @text="INICIAR SESIÓN"]</msg>
+<arg>${BOTON_INICIO}</arg>
+<doc>Waits until element specified with `locator` is visible.</doc>
+<status status="PASS" start="2025-09-29T14:35:03.310166" elapsed="0.783234"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2025-09-29T14:35:04.095390" level="INFO">Clicking element '//android.widget.Button[@resource-id="com.bancounion.unimovilplus:id/" and @text="INICIAR SESIÓN"]'.</msg>
+<msg time="2025-09-29T14:35:04.449662" level="INFO">xpath criteria: //android.widget.Button[@resource-id="com.bancounion.unimovilplus:id/" and @text="INICIAR SESIÓN"]</msg>
+<arg>${BOTON_INICIO}</arg>
+<doc>Click element identified by `locator`.</doc>
+<status status="PASS" start="2025-09-29T14:35:04.093803" elapsed="0.356285"/>
+</kw>
+<status status="PASS" start="2025-09-29T14:35:03.309685" elapsed="1.140577"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2025-09-29T14:35:05.451468" level="INFO">Slept 1 second.</msg>
+<arg>1s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2025-09-29T14:35:04.450489" elapsed="1.001518"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2025-09-29T14:35:10.454994" level="INFO">Slept 5 seconds.</msg>
+<arg>5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2025-09-29T14:35:05.452799" elapsed="5.002735"/>
+</kw>
+<kw name="HomePage.Click_Off" owner="HomePage">
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2025-09-29T14:35:11.375873" level="INFO">xpath criteria: //android.widget.ImageView[@resource-id="com.bancounion.unimovilplus:id/"][2]</msg>
+<arg>${OFF}</arg>
+<doc>Waits until element specified with `locator` is visible.</doc>
+<status status="PASS" start="2025-09-29T14:35:10.457731" elapsed="0.918266"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2025-09-29T14:35:11.377561" level="INFO">Clicking element '//android.widget.ImageView[@resource-id="com.bancounion.unimovilplus:id/"][2]'.</msg>
+<msg time="2025-09-29T14:35:12.237213" level="INFO">xpath criteria: //android.widget.ImageView[@resource-id="com.bancounion.unimovilplus:id/"][2]</msg>
+<arg>${OFF}</arg>
+<doc>Click element identified by `locator`.</doc>
+<status status="PASS" start="2025-09-29T14:35:11.376251" elapsed="0.861077"/>
+</kw>
+<status status="PASS" start="2025-09-29T14:35:10.456701" elapsed="1.780754"/>
+</kw>
+<arg>${usuario}</arg>
+<arg>${password}</arg>
+<arg>${bs}</arg>
+<arg>${glosa}</arg>
+<status status="PASS" start="2025-09-29T14:34:49.933179" elapsed="22.304337"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-09-29T14:35:12.238044" level="INFO">✅ SCRIPT COMPLETADO EXITOSAMENTE</msg>
+<arg>✅ SCRIPT COMPLETADO EXITOSAMENTE</arg>
+<arg>CONSOLE</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-09-29T14:35:12.237806" elapsed="0.000294"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-09-29T14:35:12.238395" level="INFO">=========================================</msg>
+<arg>=========================================</arg>
+<arg>CONSOLE</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-09-29T14:35:12.238257" elapsed="0.000183"/>
+</kw>
+<status status="PASS" start="2025-09-29T14:34:39.514739" elapsed="32.723925"/>
+</test>
+<kw name="AfterSuite" owner="Base" type="TEARDOWN">
+<kw name="Close Uni Movil Plus App" owner="AppHelper">
+<kw name="Close Application" owner="AppiumLibrary">
+<doc>Closes the current application and also close webdriver session.</doc>
+<status status="PASS" start="2025-09-29T14:35:12.240107" elapsed="0.518327"/>
+</kw>
+<status status="PASS" start="2025-09-29T14:35:12.239915" elapsed="0.518662"/>
+</kw>
+<kw name="Kill Appium Server" owner="AppiumManager">
+<msg time="2025-09-29T14:35:17.764398" level="INFO">Stopping Appium Server ..</msg>
+<status status="PASS" start="2025-09-29T14:35:12.758762" elapsed="5.006082"/>
+</kw>
+<arg>GIROS_PAGO_DEVOLUCION</arg>
+<status status="PASS" start="2025-09-29T14:35:12.239589" elapsed="5.525622"/>
+</kw>
+<status status="PASS" start="2025-09-29T14:34:26.080807" elapsed="51.684555"/>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="1" fail="0" skip="0" id="s1" name="Transfer">Transfer</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
