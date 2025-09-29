@@ -249,9 +249,11 @@ export class AutomationController {
       const result = await this.automationService.executeTransferRobot(variables);
       
       return {
-        success: true,
-        result,
-        message: 'Transfer robot ejecutado exitosamente',
+        success: result.success,
+        deviceId: result.deviceId,
+        deviceInfo: result.deviceInfo,
+        result: result,
+        message: result.message || 'Transfer robot ejecutado exitosamente',
       };
       
     } catch (error) {

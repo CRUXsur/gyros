@@ -736,10 +736,30 @@ export class AutomationService {
         
         let stdout = '';
         let stderr = '';
+        let detectedDeviceId: string | null = null;
+        let deviceInfo: any = {};
         
         robotProcess.stdout.on('data', (data) => {
-          stdout += data.toString();
-          this.logger.log(`Robot stdout: ${data.toString()}`);
+          const output = data.toString();
+          stdout += output;
+          this.logger.log(`Robot stdout: ${output}`);
+          
+          // Buscar el Device ID en el output en tiempo real
+          // Patrón: "🔹 DEVICE_UDID configurado como: XXXXXXXXX"
+          const deviceIdMatch = output.match(/🔹 DEVICE_UDID configurado como:\s*([^\s]+)/);
+          if (deviceIdMatch && deviceIdMatch[1]) {
+            detectedDeviceId = deviceIdMatch[1];
+            this.logger.log(`✅ Device ID detectado durante ejecución: ${detectedDeviceId}`);
+          }
+          
+          // También capturar información del dispositivo si está disponible
+          const modelMatch = output.match(/🔹 Modelo:\s*([^\n]+)/);
+          const brandMatch = output.match(/🔹 Marca:\s*([^\n]+)/);
+          const androidMatch = output.match(/🔹 Android:\s*([^\n]+)/);
+          
+          if (modelMatch) deviceInfo['model'] = modelMatch[1].trim();
+          if (brandMatch) deviceInfo['brand'] = brandMatch[1].trim();
+          if (androidMatch) deviceInfo['androidVersion'] = androidMatch[1].trim();
         });
         
         robotProcess.stderr.on('data', (data) => {
@@ -750,12 +770,23 @@ export class AutomationService {
         robotProcess.on('close', (code) => {
           this.logger.log(`Robot process exited with code: ${code}`);
           
+          // Si no se detectó durante la ejecución, intentar extraer del stdout completo
+          if (!detectedDeviceId) {
+            const deviceIdMatch = stdout.match(/🔹 DEVICE_UDID configurado como:\s*([^\s]+)/);
+            if (deviceIdMatch && deviceIdMatch[1]) {
+              detectedDeviceId = deviceIdMatch[1];
+              this.logger.log(`Device ID extraído del log completo: ${detectedDeviceId}`);
+            }
+          }
+          
           const result = {
             success: code === 0,
             exitCode: code,
             stdout: stdout,
             stderr: stderr,
             variables: variables,
+            deviceId: detectedDeviceId,
+            deviceInfo: Object.keys(deviceInfo).length > 0 ? deviceInfo : null,
             scriptName: 'transfer.robot',
             timestamp: new Date(),
             message: code === 0 ? 'Transfer.robot ejecutado exitosamente' : 'Transfer.robot falló en la ejecución'
@@ -763,7 +794,7 @@ export class AutomationService {
           
           // Log del resultado en la base de datos
           this.logAutomationProcess({
-            deviceId: 'transfer_robot',
+            deviceId: detectedDeviceId || 'transfer_robot',
             action: 'execute_transfer_robot',
             result: result,
             success: code === 0,
