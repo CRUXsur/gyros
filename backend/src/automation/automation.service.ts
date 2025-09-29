@@ -689,6 +689,102 @@ export class AutomationService {
       throw new Error(`Error ejecutando script de Robot Framework: ${error.message}`);
     }
   }
+
+  /**
+   * Ejecuta el script transfer.robot con variables personalizadas desde el formulario
+   * @param variables Objeto con las variables: usuario, password, bs, glosa
+   * @returns Resultado de la ejecución
+   */
+  async executeTransferRobot(variables: {
+    usuario: string;
+    password: string;
+    bs: string;
+    glosa: string;
+  }): Promise<any> {
+    this.logger.log(`Ejecutando transfer.robot con variables del formulario`);
+    this.logger.log(`Variables: usuario=${variables.usuario}, bs=${variables.bs}, glosa=${variables.glosa}`);
+    
+    try {
+      const { spawn } = require('child_process');
+      const path = require('path');
+      
+      // Ruta al directorio movilbot
+      const movilbotPath = path.join(process.cwd(), '..', 'movilbot');
+      const scriptPath = path.join(movilbotPath, 'transfer.robot');
+      
+      this.logger.log(`Ruta del script: ${scriptPath}`);
+      this.logger.log(`Directorio de trabajo: ${movilbotPath}`);
+      
+      return new Promise((resolve, reject) => {
+        // Construir argumentos para Robot Framework
+        // robot -v usuario:XXX -v password:XXX -v bs:XXX -v glosa:XXX transfer.robot
+        const args = [
+          '-v', `usuario:${variables.usuario}`,
+          '-v', `password:${variables.password}`,
+          '-v', `bs:${variables.bs}`,
+          '-v', `glosa:${variables.glosa}`,
+          'transfer.robot'
+        ];
+        
+        this.logger.log(`Comando: robot ${args.join(' ')}`);
+        
+        // Ejecutar robot con las variables
+        const robotProcess = spawn('robot', args, {
+          cwd: movilbotPath,
+          stdio: ['pipe', 'pipe', 'pipe']
+        });
+        
+        let stdout = '';
+        let stderr = '';
+        
+        robotProcess.stdout.on('data', (data) => {
+          stdout += data.toString();
+          this.logger.log(`Robot stdout: ${data.toString()}`);
+        });
+        
+        robotProcess.stderr.on('data', (data) => {
+          stderr += data.toString();
+          this.logger.error(`Robot stderr: ${data.toString()}`);
+        });
+        
+        robotProcess.on('close', (code) => {
+          this.logger.log(`Robot process exited with code: ${code}`);
+          
+          const result = {
+            success: code === 0,
+            exitCode: code,
+            stdout: stdout,
+            stderr: stderr,
+            variables: variables,
+            scriptName: 'transfer.robot',
+            timestamp: new Date(),
+            message: code === 0 ? 'Transfer.robot ejecutado exitosamente' : 'Transfer.robot falló en la ejecución'
+          };
+          
+          // Log del resultado en la base de datos
+          this.logAutomationProcess({
+            deviceId: 'transfer_robot',
+            action: 'execute_transfer_robot',
+            result: result,
+            success: code === 0,
+            cliente: null,
+            user: null,
+          }).catch(err => this.logger.error('Error logging automation process:', err));
+          
+          resolve(result);
+        });
+        
+        robotProcess.on('error', (error) => {
+          this.logger.error(`Error ejecutando Robot Framework: ${error.message}`);
+          reject(new Error(`Error ejecutando Robot Framework: ${error.message}`));
+        });
+      });
+      
+    } catch (error) {
+      this.logger.error(`Error en executeTransferRobot: ${error.message}`);
+      throw new Error(`Error ejecutando transfer.robot: ${error.message}`);
+    }
+  }
 }
 
 

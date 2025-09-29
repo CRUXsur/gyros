@@ -6,7 +6,8 @@ import {
   Query, 
   Param,
   HttpStatus,
-  HttpCode 
+  HttpCode,
+  Logger 
 } from '@nestjs/common';
 import { AutomationService } from './automation.service';
 import { PythonExecutorService } from './python-executor.service';
@@ -18,6 +19,8 @@ import { User } from '../auth/entities/user.entity';
 
 @Controller('automation')
 export class AutomationController {
+    private readonly logger = new Logger('AutomationController');
+
     constructor(
       private readonly automationService: AutomationService,
       private readonly pythonExecutorService: PythonExecutorService,
@@ -231,7 +234,34 @@ export class AutomationController {
         message: 'Error ejecutando script de Robot Framework',
       };
     }
-  } 
+  }
+
+  @Post('execute-transfer')
+  @HttpCode(HttpStatus.OK)
+  async executeTransferRobot(@Body() variables: {
+    usuario: string;
+    password: string;
+    bs: string;
+    glosa: string;
+  }) {
+    try {
+      this.logger.log('Ejecutando transfer.robot con variables del formulario');
+      const result = await this.automationService.executeTransferRobot(variables);
+      
+      return {
+        success: true,
+        result,
+        message: 'Transfer robot ejecutado exitosamente',
+      };
+      
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        message: 'Error ejecutando transfer robot',
+      };
+    }
+  }
 }
 
 
