@@ -6,7 +6,6 @@ Resource    ./Library/Helpers/LeerSaldoHelper.robot
 
 Resource    ./Library/Pages/HomePage.robot
 Resource    ./Library/Pages/LoginPage.robot
-Resource    ./Library/Pages/WebViewKeywords.robot
 
 Library     ./Library/PyLibs/Utility.py
 

@@ -2,7 +2,6 @@
 Library    AppiumLibrary
 Resource    ../Pages/HomePage.robot
 Resource    ../Pages/LoginPage.robot
-Resource    ../Pages/WebViewKeywords.robot
 Resource    ./LeerSaldoHelper.robot
 
 
