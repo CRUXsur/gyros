@@ -739,6 +739,7 @@ export class AutomationService {
         let detectedDeviceId: string | null = null;
         let deviceInfo: any = {};
         let saldoInicial: string | null = null;
+        let saldoFinal: string | null = null;
         
         robotProcess.stdout.on('data', (data) => {
           const output = data.toString();
@@ -755,10 +756,18 @@ export class AutomationService {
           
           // Buscar el Saldo Inicial en el output
           // Patrón: "💰 SALDO INICIAL OBTENIDO: 27.00"
-          const saldoMatch = output.match(/💰 SALDO INICIAL OBTENIDO:\s*([\d.]+)/);
-          if (saldoMatch && saldoMatch[1]) {
-            saldoInicial = saldoMatch[1];
+          const saldoInicialMatch = output.match(/💰 SALDO INICIAL OBTENIDO:\s*([\d.]+)/);
+          if (saldoInicialMatch && saldoInicialMatch[1]) {
+            saldoInicial = saldoInicialMatch[1];
             this.logger.log(`✅ Saldo Inicial detectado durante ejecución: ${saldoInicial}`);
+          }
+          
+          // Buscar el Saldo Final en el output
+          // Patrón: "💰 SALDO FINAL OBTENIDO: 26.00"
+          const saldoFinalMatch = output.match(/💰 SALDO FINAL OBTENIDO:\s*([\d.]+)/);
+          if (saldoFinalMatch && saldoFinalMatch[1]) {
+            saldoFinal = saldoFinalMatch[1];
+            this.logger.log(`✅ Saldo Final detectado durante ejecución: ${saldoFinal}`);
           }
           
           // También capturar información del dispositivo si está disponible
@@ -788,12 +797,21 @@ export class AutomationService {
             }
           }
           
-          // Si no se detectó el saldo durante la ejecución, intentar extraer del stdout completo
+          // Si no se detectó el saldo inicial durante la ejecución, intentar extraer del stdout completo
           if (!saldoInicial) {
-            const saldoMatch = stdout.match(/💰 SALDO INICIAL OBTENIDO:\s*([\d.]+)/);
-            if (saldoMatch && saldoMatch[1]) {
-              saldoInicial = saldoMatch[1];
+            const saldoInicialMatch = stdout.match(/💰 SALDO INICIAL OBTENIDO:\s*([\d.]+)/);
+            if (saldoInicialMatch && saldoInicialMatch[1]) {
+              saldoInicial = saldoInicialMatch[1];
               this.logger.log(`Saldo Inicial extraído del log completo: ${saldoInicial}`);
+            }
+          }
+          
+          // Si no se detectó el saldo final durante la ejecución, intentar extraer del stdout completo
+          if (!saldoFinal) {
+            const saldoFinalMatch = stdout.match(/💰 SALDO FINAL OBTENIDO:\s*([\d.]+)/);
+            if (saldoFinalMatch && saldoFinalMatch[1]) {
+              saldoFinal = saldoFinalMatch[1];
+              this.logger.log(`Saldo Final extraído del log completo: ${saldoFinal}`);
             }
           }
           
@@ -806,6 +824,7 @@ export class AutomationService {
             deviceId: detectedDeviceId,
             deviceInfo: Object.keys(deviceInfo).length > 0 ? deviceInfo : null,
             saldoInicial: saldoInicial,
+            saldoFinal: saldoFinal,
             scriptName: 'transfer.robot',
             timestamp: new Date(),
             message: code === 0 ? 'Transfer.robot ejecutado exitosamente' : 'Transfer.robot falló en la ejecución'
