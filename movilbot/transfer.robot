@@ -2,9 +2,11 @@
 Library     AppiumLibrary
 Resource    ./Library/Helpers/AppHelper.robot
 Resource    ./Library/Helpers/PagoDevolucionHelper.robot
+Resource    ./Library/Helpers/LeerSaldoHelper.robot
 
 Resource    ./Library/Pages/HomePage.robot
 Resource    ./Library/Pages/LoginPage.robot
+Resource    ./Library/Pages/WebViewKeywords.robot
 
 Library     ./Library/PyLibs/Utility.py
 
