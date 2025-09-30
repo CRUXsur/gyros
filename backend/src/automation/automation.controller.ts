@@ -252,6 +252,7 @@ export class AutomationController {
         success: result.success,
         deviceId: result.deviceId,
         deviceInfo: result.deviceInfo,
+        saldoInicial: result.saldoInicial,
         result: result,
         message: result.message || 'Transfer robot ejecutado exitosamente',
       };

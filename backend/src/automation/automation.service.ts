@@ -738,6 +738,7 @@ export class AutomationService {
         let stderr = '';
         let detectedDeviceId: string | null = null;
         let deviceInfo: any = {};
+        let saldoInicial: string | null = null;
         
         robotProcess.stdout.on('data', (data) => {
           const output = data.toString();
@@ -750,6 +751,14 @@ export class AutomationService {
           if (deviceIdMatch && deviceIdMatch[1]) {
             detectedDeviceId = deviceIdMatch[1];
             this.logger.log(`✅ Device ID detectado durante ejecución: ${detectedDeviceId}`);
+          }
+          
+          // Buscar el Saldo Inicial en el output
+          // Patrón: "💰 SALDO INICIAL OBTENIDO: 27.00"
+          const saldoMatch = output.match(/💰 SALDO INICIAL OBTENIDO:\s*([\d.]+)/);
+          if (saldoMatch && saldoMatch[1]) {
+            saldoInicial = saldoMatch[1];
+            this.logger.log(`✅ Saldo Inicial detectado durante ejecución: ${saldoInicial}`);
           }
           
           // También capturar información del dispositivo si está disponible
@@ -779,6 +788,15 @@ export class AutomationService {
             }
           }
           
+          // Si no se detectó el saldo durante la ejecución, intentar extraer del stdout completo
+          if (!saldoInicial) {
+            const saldoMatch = stdout.match(/💰 SALDO INICIAL OBTENIDO:\s*([\d.]+)/);
+            if (saldoMatch && saldoMatch[1]) {
+              saldoInicial = saldoMatch[1];
+              this.logger.log(`Saldo Inicial extraído del log completo: ${saldoInicial}`);
+            }
+          }
+          
           const result = {
             success: code === 0,
             exitCode: code,
@@ -787,6 +805,7 @@ export class AutomationService {
             variables: variables,
             deviceId: detectedDeviceId,
             deviceInfo: Object.keys(deviceInfo).length > 0 ? deviceInfo : null,
+            saldoInicial: saldoInicial,
             scriptName: 'transfer.robot',
             timestamp: new Date(),
             message: code === 0 ? 'Transfer.robot ejecutado exitosamente' : 'Transfer.robot falló en la ejecución'
