@@ -14,87 +14,71 @@ export class CreateClienteDto {
     apellidos: string;
 
     @IsString()
-    @MinLength(1)
-    ci: string;
+    @IsIn(['Bolivianos', 'Dolares'])
+    moneda?: string;
 
-    // @IsString()
-    // @MinLength(1)
-    // imei: string;
-    
-    @IsString()
-    @IsEmail()
-    email: string;
+    @IsNumber()
+    @IsPositive()
+    aporte_mensual: number;
 
     @IsString()
     @MinLength(1)
-    telefono: string;
+    numero_cuenta: string;
 
     @IsString()
-    @MinLength(1)
-    device_id: string;
+    @IsIn(['BCP', 'Bco.UNION', 'Coopertiva'])
+    banco?: string;
 
-    @IsString()
-    @MinLength(1)
-    direccion: string;
+    @IsDate()
+    @Type(() => Date)
+    fecha_vto_tarjeta?: Date;
 
-    @IsString()
-    @IsIn(['hombre', 'mujer', 'no_especificado'])
-    @IsOptional()
-    sexo?: string;
-
-    @IsString()
-    @IsIn(['soltero', 'casado', 'divorciado', 'viudo'])
-    @IsOptional()
-    estado_civil?: string;
 
     @IsDate()
     @Type(() => Date)
     @IsOptional()
     fecha_registro?: Date;
 
+    @IsString()
+    @MinLength(1)
+    ci: string;
+    
+    @IsString()
+    @MinLength(1)
+    fijo: string;
+
+    @IsString()
+    @MinLength(1)
+    celular: string;
+
+    @IsString()
+    @IsEmail()
+    email: string;
+
+
+
+    @IsString()
+    @MinLength(1)
+    device_id: string;
+
+
+
+
+
     @IsBoolean()
     @IsOptional()
     isActive: boolean;
 
-    // @IsString()
-    // @MinLength(1)
-    // ciudad: string;
+    @IsString()
+    observaciones: string;
 
-    // @IsString()
-    // @MinLength(1)
-    // pais: string;
 
-    // @IsString()
-    // @MinLength(1)
-    // edad: string;
 
-    // @IsString()
-    // @MinLength(1)
-    // ocupacion: string;
+    @IsString()
+    garante: string;
 
-    // @IsNumber()
-    // @IsPositive()
-    // ingresos: number;
-
-    // @IsNumber()
-    // @IsPositive()
-    // gastos: number;
-
-    // @IsNumber()
-    // @IsPositive()
-    // ahorros: number;
-
-    // @IsNumber()
-    // @IsPositive()
-    // deuda: number;
-
-    // @IsNumber()
-    // @IsPositive()
-    // credito: number;
-
-    // @IsString()
-    // @MinLength(1)
-    // tarjeta: string;
+    @IsString()
+    Celular_garante: string;
 
 
 }

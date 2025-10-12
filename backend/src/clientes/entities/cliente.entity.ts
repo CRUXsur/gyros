@@ -14,17 +14,40 @@ export class Cliente {
     apellidos: string;
 
     @Column('text',{
+        default: 'Bolivianos'
+    })
+    moneda: string;
+
+    @Column('float',{
+        default: 0
+    })
+    aporte_mensual: number;
+
+    @Column('text',{
+        default: 'no_especificado'
+    })
+    numero_cuenta: string;
+
+    @Column('text',{
+        default: 'no_especificado'
+    })
+    banco: string;
+
+    @Column('date',{
+        nullable: true
+    })
+    fecha_vto_tarjeta: Date;
+
+    @Column('text',{
         unique: true,
     })
     ci: string;
 
-    // @Column('text',{
-    //     nullable: true,
-    // })
-    // imei: string;
+    @Column()
+    fijo: string;
     
     @Column()
-    telefono: string;
+    celular: string;
 
     @Column('text',{
         unique: true,
@@ -35,60 +58,13 @@ export class Cliente {
     email: string;
 
     @Column()
-    direccion: string;
+    observaciones: string;
 
-    @Column('text',{
-        default: 'no_especificado'
-    })
-    sexo: string;
-
-    @Column('text',{
-        default: 'soltero'
-    })
-    estado_civil: string;
-
-    // @Column()
-    // ocupacion: string;
-
-    // @Column('float',{
-    //     default: 0,
-    // })
-    // ingresos: number;
-
-    // @Column('float',{
-    //     default: 0,
-    // })
-    // gastos: number;
-
-    // @Column('float',{
-    //     default: 0,
-    // })
-    // ahorros: number;
-
-    // @Column('float',{
-    //     default: 0,
-    // })
-    // deuda: number;
-
-    // @Column('float',{
-    //     default: 0,
-    // })
-    // credito: number;
-
-    // @Column()
-    // tarjeta: string;
-
-    // @Column()
-    // ciudad: string;
-
-    // @Column()
-    // pais: string;
-
-    // @Column()
-    // fecha_nacimiento: Date;
-
-    // @Column()
-    // edad: string;
+    @Column()
+    garante: string;
+    
+    @Column()
+    Celular_garante: string;
 
     @Column()
     fecha_registro: Date;
