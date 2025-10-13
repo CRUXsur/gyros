@@ -271,7 +271,7 @@ export class AutomationService {
         const validation = await this.validateClienteDevice(deviceId);
         
         if (validation.isValid && validation.hasActiveLoans) {
-          this.logger.log(`📱 Cliente detectado automáticamente: ${validation.cliente?.nombres} con ${validation.activeLoans.length} préstamo(s) activo(s)`);
+          this.logger.log(`📱 Cliente detectado automáticamente: ${validation.cliente?.nombrecompleto} con ${validation.activeLoans.length} préstamo(s) activo(s)`);
           
           // Log de detección automática
           await this.logAutomationProcess({

@@ -7,78 +7,81 @@ export class CreateClienteDto {
 
     @IsString()
     @MinLength(1)
-    nombres: string;
+    nombrecompleto: string;
 
     @IsString()
     @MinLength(1)
-    apellidos: string;
+    ci: string;
+
+    @IsString()
+    @MinLength(1)
+    @IsOptional()
+    celular?: string;
+
+    @IsString()
+    @MinLength(1)
+    @IsOptional()
+    fijo?: string;
+
+    @IsBoolean()
+    @IsOptional()
+    isActive?: boolean;
+
+    @IsString()
+    @MinLength(1)
+    @IsOptional()
+    device_id?: string;
+
+    @IsDate()
+    @Type(() => Date)
+    @IsOptional()
+    fecha_vto_tarjeta?: Date;
+
+    @IsString()
+    @IsOptional()
+    sector?: string;
+
+    @IsString()
+    @MinLength(1)
+    @IsOptional()
+    codigo?: string;
+
+    @IsString()
+    @IsIn(['BCP', 'Bco.UNION', 'Coopertiva', 'BNB'])
+    @IsOptional()
+    banco?: string;
+
+    @IsString()
+    @MinLength(1)
+    @IsOptional()
+    numero_cuenta?: string;
 
     @IsString()
     @IsIn(['Bolivianos', 'Dolares'])
     moneda?: string;
 
-    @IsNumber()
-    @IsPositive()
-    aporte_mensual: number;
+    @IsString()
+    @IsOptional()
+    garante?: string;
 
     @IsString()
-    @MinLength(1)
-    numero_cuenta: string;
+    @IsOptional()
+    celular_garante?: string;
 
     @IsString()
-    @IsIn(['BCP', 'Bco.UNION', 'Coopertiva'])
-    banco?: string;
-
-    @IsDate()
-    @Type(() => Date)
-    fecha_vto_tarjeta?: Date;
-
+    @IsOptional()
+    observaciones?: string;
 
     @IsDate()
     @Type(() => Date)
     @IsOptional()
     fecha_registro?: Date;
 
-    @IsString()
-    @MinLength(1)
-    ci: string;
-    
-    @IsString()
-    @MinLength(1)
-    fijo: string;
 
-    @IsString()
-    @MinLength(1)
-    celular: string;
-
-    @IsString()
-    @IsEmail()
-    email: string;
-
-
-
-    @IsString()
-    @MinLength(1)
-    device_id: string;
-
-
-
-
-
-    @IsBoolean()
-    @IsOptional()
-    isActive: boolean;
-
-    @IsString()
-    observaciones: string;
-
-
-
-    @IsString()
-    garante: string;
-
-    @IsString()
-    Celular_garante: string;
+    // @IsString()
+    // @IsEmail()
+    // @IsOptional()
+    // email?: string;
 
 
 }

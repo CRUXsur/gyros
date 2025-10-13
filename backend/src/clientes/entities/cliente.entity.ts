@@ -8,30 +8,33 @@ export class Cliente {
     id_cliente: string;
 
     @Column()
-    nombres: string;
-
-    @Column()
-    apellidos: string;
+    nombrecompleto: string;
 
     @Column('text',{
-        default: 'Bolivianos'
+        unique: true,
     })
-    moneda: string;
-
-    @Column('float',{
-        default: 0
-    })
-    aporte_mensual: number;
+    ci: string;
 
     @Column('text',{
-        default: 'no_especificado'
+        nullable: true
     })
-    numero_cuenta: string;
+    celular: string;
 
     @Column('text',{
-        default: 'no_especificado'
+        nullable: true
     })
-    banco: string;
+    fijo: string;
+
+    @Column('bool', {
+        default: true,
+    })
+    isActive: boolean;
+
+    @Column('text',{
+        unique: true,
+        nullable: true
+    })
+    device_id: string;
 
     @Column('date',{
         nullable: true
@@ -39,44 +42,62 @@ export class Cliente {
     fecha_vto_tarjeta: Date;
 
     @Column('text',{
-        unique: true,
+        nullable: true
     })
-    ci: string;
-
-    @Column()
-    fijo: string;
-    
-    @Column()
-    celular: string;
+    sector: string;
 
     @Column('text',{
         unique: true,
+        nullable: true
     })
-    device_id: string;
+    codigo: string;
 
-    @Column()
-    email: string;
+    @Column('text',{
+        default: 'no_especificado'
+    })
+    banco: string;
 
-    @Column()
+    @Column('text',{
+        unique: true,
+        default: 'no_especificado'
+    })
+    numero_cuenta: string;
+
+    @Column('text',{
+        default: 'Bolivianos'
+    })
+    moneda: string;
+
+    @Column('text',{
+        nullable: true
+    })
+    garante: string;
+
+    @Column('text',{
+        nullable: true
+    })
+    celular_garante: string;
+
+    @Column('text',{
+        nullable: true
+    })
     observaciones: string;
 
-    @Column()
-    garante: string;
-    
-    @Column()
-    Celular_garante: string;
-
-    @Column()
+    @Column('date',{
+        nullable: true
+    })
     fecha_registro: Date;
 
-    @Column('bool', {
-        default: true,
-    })
-    isActive: boolean;
+
+    // @Column('text',{
+    //     nullable: true
+    // })
+    // email: string;
+
 
     @BeforeInsert()
     checkFieldsBeforeInsert() {
-        this.email = this.email.toLowerCase().trim();
+        //this.email = this.email.toLowerCase().trim();
         this.ci = this.ci.toString().trim();
         
         // Set fecha_registro to current date and time if not provided
