@@ -20,6 +20,14 @@ export class CreateBancoClienteDto {
     @MinLength(1)
     moneda: string;
 
+    @IsString()
+    @IsOptional()
+    usuario?: string;
+
+    @IsString()
+    @IsOptional()
+    key?: string;
+
     @IsBoolean()
     @IsOptional()
     isActive?: boolean;

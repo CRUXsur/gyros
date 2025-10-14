@@ -25,6 +25,16 @@ export class BancoCliente {
     @Column('text')
     moneda: string;
 
+    @Column('text', {
+        nullable: true,
+    })
+    usuario: string;
+
+    @Column('text', {
+        nullable: true,
+    })
+    key: string;
+
     @Column('bool', {
         default: true,
     })
