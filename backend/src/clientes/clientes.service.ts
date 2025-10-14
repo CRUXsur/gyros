@@ -5,6 +5,8 @@ import { Cliente } from './entities/cliente.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { validate as isUUID } from 'uuid';
+import { Prestamo } from '../prestamos/entities/prestamo.entity';
+import { Cuota } from '../cuotas/entities/cuota.entity';
 
 
 @Injectable()
@@ -15,6 +17,10 @@ export class ClientesService {
   constructor(
     @InjectRepository(Cliente)
     private readonly clienteRepository: Repository<Cliente>,
+    @InjectRepository(Prestamo)
+    private readonly prestamoRepository: Repository<Prestamo>,
+    @InjectRepository(Cuota)
+    private readonly cuotaRepository: Repository<Cuota>,
   ){}
 
 
@@ -29,8 +35,54 @@ export class ClientesService {
   }
 
   // TODO: Agregar paginacion
-  findAll() {
-    return this.clienteRepository.find({});
+  async findAll() {
+    const clientes = await this.clienteRepository.find({});
+    
+    // Para cada cliente, obtener información de préstamos y cuotas
+    const clientesConDatos = await Promise.all(
+      clientes.map(async (cliente) => {
+        // Buscar préstamos activos del cliente
+        const prestamos = await this.prestamoRepository.find({
+          where: { 
+            cliente: { id_cliente: cliente.id_cliente },
+            isActive: true 
+          },
+          order: { fecha_prestamo: 'DESC' }
+        });
+
+        // Si tiene préstamos, obtener el más reciente
+        let monto_prestado: number | null = null;
+        let monto_cuota: number | null = null;
+
+        if (prestamos.length > 0) {
+          const prestamoActual = prestamos[0];
+          monto_prestado = prestamoActual.monto_prestado;
+
+          // Buscar cuotas del préstamo actual
+          const cuotas = await this.cuotaRepository.find({
+            where: { 
+              prestamo: { id_prestamo: prestamoActual.id_prestamo },
+              isActive: true 
+            },
+            order: { numero_cuota: 'ASC' }
+          });
+
+          // Tomar el monto de la primera cuota
+          if (cuotas.length > 0) {
+            monto_cuota = cuotas[0].monto_cuota;
+          }
+        }
+
+        return {
+          ...cliente,
+          monto_prestado,
+          monto_cuota,
+          prestamos
+        };
+      })
+    );
+
+    return clientesConDatos;
   }
 
   async findOne(term: string) {

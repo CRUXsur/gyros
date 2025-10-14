@@ -7,6 +7,10 @@ import { SeedService } from './seed.service';
 export class SeedController {
   constructor(private readonly seedService: SeedService) {}
 
+  @Post('bancos')
+  seedBancos() {
+    return this.seedService.seedBancos();
+  }
 
   @Get()
   findAll() {
@@ -17,7 +21,6 @@ export class SeedController {
   findOne(@Param('id') id: string) {
     return this.seedService.findOne(+id);
   }
-
 
   @Delete(':id')
   remove(@Param('id') id: string) {
