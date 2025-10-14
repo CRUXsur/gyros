@@ -1,4 +1,5 @@
-import { BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BancoCliente } from "../../banco-cliente/entities/banco-cliente.entity";
 
 
 
@@ -87,6 +88,13 @@ export class Cliente {
         nullable: true
     })
     fecha_registro: Date;
+
+    @OneToMany(
+        () => BancoCliente,
+        (bancoCliente) => bancoCliente.cliente,
+        { cascade: true, eager: false }
+    )
+    bancos: BancoCliente[];
 
 
     // @Column('text',{

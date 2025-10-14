@@ -13,6 +13,7 @@ import { CuotasModule } from './cuotas/cuotas.module';
 import { PagosModule } from './pagos/pagos.module';
 import { AutomationModule } from './automation/automation.module';
 import { BancosModule } from './bancos/bancos.module';
+import { BancoClienteModule } from './banco-cliente/banco-cliente.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { BancosModule } from './bancos/bancos.module';
     PagosModule,
     AutomationModule,
     BancosModule,
+    BancoClienteModule,
   ],
   controllers: [AppController],
   providers: [AppService],
