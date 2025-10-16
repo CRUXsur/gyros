@@ -20,6 +20,7 @@ import { BancoClienteModule } from './banco-cliente/banco-cliente.module';
     ConfigModule.forRoot(),
     ScheduleModule.forRoot(),
     TypeOrmModule.forRoot({
+      ssl: process.env.STAGE === 'prod',
       type: 'postgres',
       host: process.env.DB_HOST || 'localhost',
       port: parseInt(process.env.DB_PORT || '5432'),
