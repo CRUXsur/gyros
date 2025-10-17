@@ -15,12 +15,21 @@ import { AutomationModule } from './automation/automation.module';
 import { BancosModule } from './bancos/bancos.module';
 import { BancoClienteModule } from './banco-cliente/banco-cliente.module';
 
+
+
+
 @Module({
   imports: [
     ConfigModule.forRoot(),
     ScheduleModule.forRoot(),
     TypeOrmModule.forRoot({
-      ssl: process.env.STAGE === 'prod',
+
+      ssl: {
+        rejectUnauthorized: false, // <--- Importante
+      },
+
+
+      //ssl: process.env.STAGE === 'prod',
       extra: {
         ssl: process.env.STAGE === 'prod'
         ? {rejectUnauthorized: false,}
