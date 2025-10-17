@@ -23,18 +23,6 @@ import { BancoClienteModule } from './banco-cliente/banco-cliente.module';
     ConfigModule.forRoot(),
     ScheduleModule.forRoot(),
     TypeOrmModule.forRoot({
-
-      ssl: {
-        rejectUnauthorized: false, // <--- Importante
-      },
-
-
-      //ssl: process.env.STAGE === 'prod',
-      extra: {
-        ssl: process.env.STAGE === 'prod'
-        ? {rejectUnauthorized: false,}
-        : null,
-      },
       type: 'postgres',
       host: process.env.DB_HOST || 'localhost',
       port: parseInt(process.env.DB_PORT || '5432'),
@@ -43,6 +31,14 @@ import { BancoClienteModule } from './banco-cliente/banco-cliente.module';
       password: process.env.DB_PASSWORD || 'password',
       autoLoadEntities: true,
       synchronize: true,
+      ssl: process.env.STAGE === 'prod' ? { rejectUnauthorized: false } : false,
+      extra: process.env.STAGE === 'prod' 
+        ? {
+            ssl: {
+              rejectUnauthorized: false,
+            }
+          }
+        : {},
     }),
     PrestamosModule,
     CommonModule,
