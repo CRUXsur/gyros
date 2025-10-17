@@ -1,0 +1,54 @@
+import { Repository } from 'typeorm';
+import { AutomationLog } from './entities/automation-log.entity';
+import { Cliente } from '../clientes/entities/cliente.entity';
+import { Prestamo } from '../prestamos/entities/prestamo.entity';
+import { User } from '../auth/entities/user.entity';
+import { PythonExecutorService } from './python-executor.service';
+import { AutomationActionDto } from './dto/automation-action.dto';
+import { DeviceValidationResult, OrchestrationResult, AutomationStatus } from './interfaces/automation-result.interface';
+export declare class AutomationService {
+    private readonly automationLogRepository;
+    private readonly clienteRepository;
+    private readonly prestamoRepository;
+    private readonly pythonExecutorService;
+    private readonly logger;
+    constructor(automationLogRepository: Repository<AutomationLog>, clienteRepository: Repository<Cliente>, prestamoRepository: Repository<Prestamo>, pythonExecutorService: PythonExecutorService);
+    validateClienteDevice(deviceId: string): Promise<DeviceValidationResult>;
+    orchestrateDeviceProcess(actionDto: AutomationActionDto, user: User): Promise<OrchestrationResult>;
+    togglePrestamoStatus(prestamoId: string, newStatus: boolean): Promise<any>;
+    logAutomationProcess(logData: {
+        deviceId: string;
+        action: string;
+        result: any;
+        success: boolean;
+        cliente: Cliente | null;
+        user: User | null;
+    }): Promise<AutomationLog>;
+    getCurrentStatus(): Promise<AutomationStatus>;
+    getProcessHistory(limit?: number): Promise<AutomationLog[]>;
+    private getTodayProcessCount;
+    private getSuccessRate;
+    hourlyDeviceCheck(): Promise<void>;
+    dailyReportGeneration(): Promise<void>;
+    monthlyMaintenance(): Promise<void>;
+    triggerScheduledCheck(): Promise<any>;
+    getDailyStatistics(): Promise<any>;
+    getDeviceStatistics(): Promise<any>;
+    getPerformanceStatistics(): Promise<any>;
+    getSystemHealth(): Promise<any>;
+    private getProcessesPerHour;
+    private getActionBreakdown;
+    private getErrorTypes;
+    private getMostActiveDevice;
+    private calculateSuccessRate;
+    private estimateProcessingTimes;
+    private getPeakHours;
+    private calculateReliability;
+    executeRobotScript(scriptName: string): Promise<any>;
+    executeTransferRobot(variables: {
+        usuario: string;
+        password: string;
+        bs: string;
+        glosa: string;
+    }): Promise<any>;
+}
