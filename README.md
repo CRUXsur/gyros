@@ -24,7 +24,6 @@
   <p align="center"> <a href="http://quanticasoft.org" target="_blank">Gyros</a> Gestion Financiera Logistica.</p>
 
 ## Gyros API
-
 1. Clonar proyecto
 2. ```yarn install```
 3. ```yarn build```
@@ -57,7 +56,6 @@
 
 
 ## Robot - Automatizacion Python
-
 1. Levantar Appium
     ```
     start Appium 
@@ -67,6 +65,11 @@
    ```    
    robot -d Report Test/Add_Note_Test.robot 
    ```
+
+
+## Desplegar - NestJS - PostGreSQL
+
+
 
 
 ## 
