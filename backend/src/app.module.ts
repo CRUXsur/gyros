@@ -21,6 +21,11 @@ import { BancoClienteModule } from './banco-cliente/banco-cliente.module';
     ScheduleModule.forRoot(),
     TypeOrmModule.forRoot({
       ssl: process.env.STAGE === 'prod',
+      extra: {
+        ssl: process.env.STAGE === 'prod'
+        ? {rejectUnauthorized: false,}
+        : null,
+      },
       type: 'postgres',
       host: process.env.DB_HOST || 'localhost',
       port: parseInt(process.env.DB_PORT || '5432'),
