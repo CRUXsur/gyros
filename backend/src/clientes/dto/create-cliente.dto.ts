@@ -7,94 +7,81 @@ export class CreateClienteDto {
 
     @IsString()
     @MinLength(1)
-    nombres: string;
-
-    @IsString()
-    @MinLength(1)
-    apellidos: string;
+    nombrecompleto: string;
 
     @IsString()
     @MinLength(1)
     ci: string;
 
-    // @IsString()
-    // @MinLength(1)
-    // imei: string;
-    
-    @IsString()
-    @IsEmail()
-    email: string;
-
     @IsString()
     @MinLength(1)
-    telefono: string;
-
-    @IsString()
-    @MinLength(1)
-    device_id: string;
-
-    @IsString()
-    @MinLength(1)
-    direccion: string;
-
-    @IsString()
-    @IsIn(['hombre', 'mujer', 'no_especificado'])
     @IsOptional()
-    sexo?: string;
+    celular?: string;
 
     @IsString()
-    @IsIn(['soltero', 'casado', 'divorciado', 'viudo'])
+    @MinLength(1)
     @IsOptional()
-    estado_civil?: string;
+    fijo?: string;
+
+    @IsBoolean()
+    @IsOptional()
+    isActive?: boolean;
+
+    @IsString()
+    @MinLength(1)
+    @IsOptional()
+    device_id?: string;
+
+    @IsDate()
+    @Type(() => Date)
+    @IsOptional()
+    fecha_vto_tarjeta?: Date;
+
+    @IsString()
+    @IsOptional()
+    sector?: string;
+
+    @IsString()
+    @MinLength(1)
+    @IsOptional()
+    codigo?: string;
+
+    @IsString()
+    @IsIn(['BCP', 'Bco.UNION', 'Coopertiva', 'BNB'])
+    @IsOptional()
+    banco?: string;
+
+    @IsString()
+    @MinLength(1)
+    @IsOptional()
+    numero_cuenta?: string;
+
+    @IsString()
+    @IsIn(['Bolivianos', 'Dolares'])
+    moneda?: string;
+
+    @IsString()
+    @IsOptional()
+    garante?: string;
+
+    @IsString()
+    @IsOptional()
+    celular_garante?: string;
+
+    @IsString()
+    @IsOptional()
+    observaciones?: string;
 
     @IsDate()
     @Type(() => Date)
     @IsOptional()
     fecha_registro?: Date;
 
-    @IsBoolean()
-    @IsOptional()
-    isActive: boolean;
 
     // @IsString()
-    // @MinLength(1)
-    // ciudad: string;
-
-    // @IsString()
-    // @MinLength(1)
-    // pais: string;
-
-    // @IsString()
-    // @MinLength(1)
-    // edad: string;
-
-    // @IsString()
-    // @MinLength(1)
-    // ocupacion: string;
-
-    // @IsNumber()
-    // @IsPositive()
-    // ingresos: number;
-
-    // @IsNumber()
-    // @IsPositive()
-    // gastos: number;
-
-    // @IsNumber()
-    // @IsPositive()
-    // ahorros: number;
-
-    // @IsNumber()
-    // @IsPositive()
-    // deuda: number;
-
-    // @IsNumber()
-    // @IsPositive()
-    // credito: number;
-
-    // @IsString()
-    // @MinLength(1)
-    // tarjeta: string;
+    // @IsEmail()
+    // @IsOptional()
+    // email?: string;
 
 
 }

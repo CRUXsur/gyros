@@ -12,12 +12,15 @@ import { ClientesModule } from './clientes/clientes.module';
 import { CuotasModule } from './cuotas/cuotas.module';
 import { PagosModule } from './pagos/pagos.module';
 import { AutomationModule } from './automation/automation.module';
+import { BancosModule } from './bancos/bancos.module';
+import { BancoClienteModule } from './banco-cliente/banco-cliente.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     ScheduleModule.forRoot(),
     TypeOrmModule.forRoot({
+      ssl: process.env.STAGE === 'prod',
       type: 'postgres',
       host: process.env.DB_HOST || 'localhost',
       port: parseInt(process.env.DB_PORT || '5432'),
@@ -35,6 +38,8 @@ import { AutomationModule } from './automation/automation.module';
     CuotasModule,
     PagosModule,
     AutomationModule,
+    BancosModule,
+    BancoClienteModule,
   ],
   controllers: [AppController],
   providers: [AppService],
