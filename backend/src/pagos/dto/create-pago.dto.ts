@@ -21,6 +21,35 @@ export class CreatePagoDto {
     @Type(() => Date)
     fecha_pago: Date;
 
+    @IsNumber()
+    @IsOptional()
+    inicial?: number;
+
+    @IsNumber()
+    @IsOptional()
+    final?: number;
+
+    @IsNumber()
+    @IsOptional()
+    debitado?: number;
+
+    @IsNumber()
+    @IsOptional()
+    interes?: number;
+
+    @IsNumber()
+    @IsOptional()
+    dev_kapital?: number;
+
+    @IsNumber()
+    @IsOptional()
+    saldo_deudor?: number;
+
+    @IsString()
+    @IsIn(['pendiente', 'pagado', 'parcial', 'vencido'])
+    @IsOptional()
+    estado?: string;
+
     @IsString()
     @IsIn(['efectivo', 'transferencia', 'cheque', 'tarjeta'])
     @IsOptional()

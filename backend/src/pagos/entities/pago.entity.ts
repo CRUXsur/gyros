@@ -26,6 +26,41 @@ export class Pago {
     @Column()
     fecha_pago: Date;
     
+    @Column('float', {
+        nullable: true
+    })
+    inicial?: number;
+
+    @Column('float', {
+        nullable: true
+    })
+    final?: number;
+
+    @Column('float', {
+        nullable: true
+    })
+    debitado?: number;
+
+    @Column('float', {
+        nullable: true
+    })
+    interes?: number;
+
+    @Column('float', {
+        nullable: true
+    })
+    dev_kapital?: number;
+
+    @Column('float', {
+        nullable: true
+    })
+    saldo_deudor?: number;
+
+    @Column('text', {
+        default: 'pendiente'
+    })
+    estado: string; // pendiente, pagado, parcial, vencido
+    
     @Column('text', {
         default: 'efectivo'
     })
