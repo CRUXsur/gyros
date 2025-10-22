@@ -33,10 +33,25 @@ export class PagosService {
     try {
       const { id_cuota, id_prestamo, monto_pago, ...pagoDetails } = createPagoDto;
       
-      // Verificar que la cuota existe
-      const cuota = await this.cuotaRepository.findOneBy({ id_cuota });
-      if (!cuota) {
-        throw new NotFoundException(`Cuota con id ${id_cuota} no encontrada`);
+      let cuota = null;
+      
+      // Si se proporciona id_cuota, verificar que existe
+      if (id_cuota) {
+        cuota = await this.cuotaRepository.findOneBy({ id_cuota });
+        if (!cuota) {
+          throw new NotFoundException(`Cuota con id ${id_cuota} no encontrada`);
+        }
+        
+        // Verificar que la cuota pertenece al préstamo
+        if (cuota.prestamo.id_prestamo !== id_prestamo) {
+          throw new BadRequestException('La cuota no pertenece al préstamo especificado');
+        }
+
+        // Validar que el monto del pago no exceda el monto pendiente de la cuota
+        const montoPendiente = cuota.monto_cuota - cuota.monto_pagado;
+        if (monto_pago > montoPendiente) {
+          throw new BadRequestException(`El monto del pago ($${monto_pago}) no puede ser mayor al monto pendiente ($${montoPendiente})`);
+        }
       }
 
       // Verificar que el préstamo existe
@@ -45,45 +60,36 @@ export class PagosService {
         throw new NotFoundException(`Préstamo con id ${id_prestamo} no encontrado`);
       }
 
-      // Verificar que la cuota pertenece al préstamo
-      if (cuota.prestamo.id_prestamo !== id_prestamo) {
-        throw new BadRequestException('La cuota no pertenece al préstamo especificado');
-      }
-
-      // Validar que el monto del pago no exceda el monto pendiente de la cuota
-      const montoPendiente = cuota.monto_cuota - cuota.monto_pagado;
-      if (monto_pago > montoPendiente) {
-        throw new BadRequestException(`El monto del pago ($${monto_pago}) no puede ser mayor al monto pendiente ($${montoPendiente})`);
-      }
-
       // Crear el pago
       const pago = this.pagoRepository.create({
         ...pagoDetails,
         monto_pago,
-        cuota,
+        cuota: cuota || undefined,
         prestamo,
         user,
       });
 
       await queryRunner.manager.save(pago);
 
-      // Actualizar la cuota con el nuevo monto pagado
-      const nuevoMontoPagado = cuota.monto_pagado + monto_pago;
-      const nuevoEstado = nuevoMontoPagado >= cuota.monto_cuota ? 'pagado' : 'pendiente';
+      // Actualizar la cuota si existe
+      if (cuota) {
+        const nuevoMontoPagado = cuota.monto_pagado + monto_pago;
+        const nuevoEstado = nuevoMontoPagado >= cuota.monto_cuota ? 'pagado' : 'pendiente';
 
-      const updateData: any = {
-        monto_pagado: nuevoMontoPagado,
-        estado: nuevoEstado
-      };
+        const updateData: any = {
+          monto_pagado: nuevoMontoPagado,
+          estado: nuevoEstado
+        };
 
-      if (nuevoEstado === 'pagado') {
-        updateData.fecha_pago = createPagoDto.fecha_pago;
+        if (nuevoEstado === 'pagado') {
+          updateData.fecha_pago = createPagoDto.fecha_pago;
+        }
+
+        await queryRunner.manager.update(Cuota, 
+          { id_cuota }, 
+          updateData
+        );
       }
-
-      await queryRunner.manager.update(Cuota, 
-        { id_cuota }, 
-        updateData
-      );
 
       await queryRunner.commitTransaction();
       
@@ -207,26 +213,28 @@ export class PagosService {
     try {
       const pago = await this.findOne(id_pago);
       
-      // Actualizar la cuota restando el monto del pago eliminado
-      const cuota = pago.cuota;
-      const nuevoMontoPagado = cuota.monto_pagado - pago.monto_pago;
-      const nuevoEstado = nuevoMontoPagado >= cuota.monto_cuota ? 'pagado' : 'pendiente';
+      // Actualizar la cuota si existe
+      if (pago.cuota) {
+        const cuota = pago.cuota;
+        const nuevoMontoPagado = cuota.monto_pagado - pago.monto_pago;
+        const nuevoEstado = nuevoMontoPagado >= cuota.monto_cuota ? 'pagado' : 'pendiente';
 
-      const updateData: any = {
-        monto_pagado: nuevoMontoPagado,
-        estado: nuevoEstado
-      };
+        const updateData: any = {
+          monto_pagado: nuevoMontoPagado,
+          estado: nuevoEstado
+        };
 
-      if (nuevoEstado === 'pagado') {
-        updateData.fecha_pago = cuota.fecha_pago;
-      } else {
-        updateData.fecha_pago = null;
+        if (nuevoEstado === 'pagado') {
+          updateData.fecha_pago = cuota.fecha_pago;
+        } else {
+          updateData.fecha_pago = null;
+        }
+
+        await queryRunner.manager.update(Cuota, 
+          { id_cuota: cuota.id_cuota }, 
+          updateData
+        );
       }
-
-      await queryRunner.manager.update(Cuota, 
-        { id_cuota: cuota.id_cuota }, 
-        updateData
-      );
 
       await queryRunner.manager.remove(pago);
       await queryRunner.commitTransaction();

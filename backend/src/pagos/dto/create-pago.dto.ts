@@ -7,7 +7,8 @@ export class CreatePagoDto {
  
     @IsString()
     @MinLength(1)
-    id_cuota: string;
+    @IsOptional()
+    id_cuota?: string;
 
     @IsString()
     @MinLength(1)

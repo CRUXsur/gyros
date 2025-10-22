@@ -10,9 +10,9 @@ export class Pago {
 
     @ManyToOne(
         () => Cuota,
-        { eager: true }
+        { eager: true, nullable: true }
     )
-    cuota: Cuota;
+    cuota?: Cuota;
 
     @ManyToOne(
         () => Prestamo,
