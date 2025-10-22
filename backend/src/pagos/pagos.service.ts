@@ -33,11 +33,14 @@ export class PagosService {
     try {
       const { id_cuota, id_prestamo, monto_pago, ...pagoDetails } = createPagoDto;
       
-      let cuota = null;
+      let cuota: Cuota | null = null;
       
       // Si se proporciona id_cuota, verificar que existe
       if (id_cuota) {
-        cuota = await this.cuotaRepository.findOneBy({ id_cuota });
+        cuota = await this.cuotaRepository.findOne({
+          where: { id_cuota },
+          relations: ['prestamo']
+        });
         if (!cuota) {
           throw new NotFoundException(`Cuota con id ${id_cuota} no encontrada`);
         }
