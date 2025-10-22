@@ -9,7 +9,7 @@ export class Cuota {
 
     @ManyToOne(
         () => Prestamo,
-        { eager: true }
+        { eager: true, onDelete: 'CASCADE' }
     )
     prestamo: Prestamo;
 

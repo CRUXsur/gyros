@@ -10,13 +10,13 @@ export class Pago {
 
     @ManyToOne(
         () => Cuota,
-        { eager: true, nullable: true }
+        { eager: true, nullable: true, onDelete: 'SET NULL' }
     )
     cuota?: Cuota;
 
     @ManyToOne(
         () => Prestamo,
-        { eager: true }
+        { eager: true, onDelete: 'CASCADE' }
     )
     prestamo: Prestamo;
 

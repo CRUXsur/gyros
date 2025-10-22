@@ -11,7 +11,7 @@ export class Prestamo {
 
     @ManyToOne(
         () => Cliente,
-        { eager: true }
+        { eager: true, onDelete: 'CASCADE' }
     )
     cliente: Cliente;
 
