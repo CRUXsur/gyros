@@ -24,6 +24,7 @@ Close Uni Movil Plus App
 
 Launch Uni Movil Plus
     Activate Application        com.bancounion.unimovilplus
+    Sleep    4s
     wait until element is visible   ${PERMISO}
     click element   ${PERMISO}
     wait until element is visible   ${PERMITIR}
