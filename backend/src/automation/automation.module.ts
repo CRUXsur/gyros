@@ -6,6 +6,7 @@ import { PythonExecutorService } from './python-executor.service';
 import { AutomationLog } from './entities/automation-log.entity';
 import { ClientesModule } from '../clientes/clientes.module';
 import { PrestamosModule } from '../prestamos/prestamos.module';
+import { BancoClienteModule } from '../banco-cliente/banco-cliente.module';
 import { AuthModule } from '../auth/auth.module';
 
 @Module({
@@ -15,6 +16,7 @@ import { AuthModule } from '../auth/auth.module';
     TypeOrmModule.forFeature([AutomationLog]),
     ClientesModule,
     PrestamosModule,
+    BancoClienteModule,
     AuthModule,
   ],
   exports: [AutomationService, PythonExecutorService],

@@ -6,6 +6,7 @@ import { AutomationLog } from './entities/automation-log.entity';
 import { Cliente } from '../clientes/entities/cliente.entity';
 import { Prestamo } from '../prestamos/entities/prestamo.entity';
 import { User } from '../auth/entities/user.entity';
+import { BancoCliente } from '../banco-cliente/entities/banco-cliente.entity';
 import { PythonExecutorService } from './python-executor.service';
 import { AutomationActionDto } from './dto/automation-action.dto';
 import { 
@@ -29,6 +30,9 @@ export class AutomationService {
     
     @InjectRepository(Prestamo)
     private readonly prestamoRepository: Repository<Prestamo>,
+    
+    @InjectRepository(BancoCliente)
+    private readonly bancoClienteRepository: Repository<BancoCliente>,
     
     private readonly pythonExecutorService: PythonExecutorService,
   ) {}
@@ -852,6 +856,176 @@ export class AutomationService {
     } catch (error) {
       this.logger.error(`Error en executeTransferRobot: ${error.message}`);
       throw new Error(`Error ejecutando transfer.robot: ${error.message}`);
+    }
+  }
+
+  /**
+   * Ejecuta el script devsaldo.robot para consultar el saldo de un cliente
+   * @param clienteId ID del cliente del cual consultar el saldo
+   * @returns Resultado con el saldo obtenido
+   */
+  async executeDevSaldo(clienteId: string): Promise<any> {
+    this.logger.log(`Ejecutando devsaldo.robot para cliente: ${clienteId}`);
+    
+    try {
+      // 1. Buscar el cliente
+      const cliente = await this.clienteRepository.findOne({
+        where: { id_cliente: clienteId },
+      });
+      
+      if (!cliente) {
+        throw new NotFoundException(`Cliente con ID ${clienteId} no encontrado`);
+      }
+      
+      // 2. Buscar el banco activo del cliente
+      const bancoCliente = await this.bancoClienteRepository.findOne({
+        where: { 
+          cliente: { id_cliente: clienteId },
+          isActive: true 
+        },
+        relations: ['cliente'],
+      });
+      
+      if (!bancoCliente) {
+        throw new NotFoundException(`No se encontró banco activo para el cliente ${clienteId}`);
+      }
+      
+      if (!bancoCliente.usuario || !bancoCliente.key) {
+        throw new Error(`El cliente no tiene usuario o password configurado`);
+      }
+      
+      this.logger.log(`Usuario encontrado: ${bancoCliente.usuario}`);
+      
+      const { spawn } = require('child_process');
+      const path = require('path');
+      
+      // Ruta al directorio devsaldo
+      const devsaldoPath = path.join(process.cwd(), '..', 'devsaldo');
+      const scriptPath = path.join(devsaldoPath, 'devsaldo.robot');
+      
+      this.logger.log(`Ruta del script: ${scriptPath}`);
+      this.logger.log(`Directorio de trabajo: ${devsaldoPath}`);
+      
+      return new Promise((resolve, reject) => {
+        // Construir argumentos para Robot Framework
+        // robot -v usuario:XXX -v password:XXX devsaldo.robot
+        const args = [
+          '-v', `usuario:${bancoCliente.usuario}`,
+          '-v', `password:${bancoCliente.key}`,
+          'devsaldo.robot'
+        ];
+        
+        this.logger.log(`Comando: robot ${args.join(' ')}`);
+        
+        // Ejecutar robot con las variables
+        const robotProcess = spawn('robot', args, {
+          cwd: devsaldoPath,
+          stdio: ['pipe', 'pipe', 'pipe']
+        });
+        
+        let stdout = '';
+        let stderr = '';
+        let detectedDeviceId: string | null = null;
+        let deviceInfo: any = {};
+        let saldo: string | null = null;
+        
+        robotProcess.stdout.on('data', (data) => {
+          const output = data.toString();
+          stdout += output;
+          this.logger.log(`Robot stdout: ${output}`);
+          
+          // Buscar el Device ID en el output
+          const deviceIdMatch = output.match(/🔹 DEVICE_UDID configurado como:\s*([^\s]+)/);
+          if (deviceIdMatch && deviceIdMatch[1]) {
+            detectedDeviceId = deviceIdMatch[1];
+            this.logger.log(`✅ Device ID detectado: ${detectedDeviceId}`);
+          }
+          
+          // Buscar el Saldo en el output
+          // Patrón: "✅ Saldo obtenido: 27.00" o "💰 Saldo: 27.00"
+          const saldoMatch = output.match(/(?:✅ Saldo obtenido:|💰 Saldo:|Saldo:)\s*([\d.,]+)/i);
+          if (saldoMatch && saldoMatch[1]) {
+            saldo = saldoMatch[1];
+            this.logger.log(`✅ Saldo detectado: ${saldo}`);
+          }
+          
+          // También capturar información del dispositivo si está disponible
+          const modelMatch = output.match(/🔹 Modelo:\s*([^\n]+)/);
+          const brandMatch = output.match(/🔹 Marca:\s*([^\n]+)/);
+          const androidMatch = output.match(/🔹 Android:\s*([^\n]+)/);
+          
+          if (modelMatch) deviceInfo['model'] = modelMatch[1].trim();
+          if (brandMatch) deviceInfo['brand'] = brandMatch[1].trim();
+          if (androidMatch) deviceInfo['androidVersion'] = androidMatch[1].trim();
+        });
+        
+        robotProcess.stderr.on('data', (data) => {
+          stderr += data.toString();
+          this.logger.error(`Robot stderr: ${data.toString()}`);
+        });
+        
+        robotProcess.on('close', (code) => {
+          this.logger.log(`Robot process exited with code: ${code}`);
+          
+          // Si no se detectó durante la ejecución, intentar extraer del stdout completo
+          if (!detectedDeviceId) {
+            const deviceIdMatch = stdout.match(/🔹 DEVICE_UDID configurado como:\s*([^\s]+)/);
+            if (deviceIdMatch && deviceIdMatch[1]) {
+              detectedDeviceId = deviceIdMatch[1];
+              this.logger.log(`Device ID extraído del log completo: ${detectedDeviceId}`);
+            }
+          }
+          
+          // Si no se detectó el saldo durante la ejecución, intentar extraer del stdout completo
+          if (!saldo) {
+            const saldoMatch = stdout.match(/(?:✅ Saldo obtenido:|💰 Saldo:|Saldo:)\s*([\d.,]+)/i);
+            if (saldoMatch && saldoMatch[1]) {
+              saldo = saldoMatch[1];
+              this.logger.log(`Saldo extraído del log completo: ${saldo}`);
+            }
+          }
+          
+          const result = {
+            success: code === 0 && saldo !== null,
+            exitCode: code,
+            stdout: stdout,
+            stderr: stderr,
+            saldo: saldo || 'No disponible',
+            clienteId: clienteId,
+            usuario: bancoCliente.usuario,
+            deviceId: detectedDeviceId,
+            deviceInfo: Object.keys(deviceInfo).length > 0 ? deviceInfo : null,
+            scriptName: 'devsaldo.robot',
+            timestamp: new Date(),
+            message: code === 0 && saldo ? 'DevSaldo ejecutado exitosamente' : 'Error al obtener saldo'
+          };
+          
+          // Log del resultado en la base de datos
+          this.logAutomationProcess({
+            deviceId: detectedDeviceId || clienteId,
+            action: 'execute_devsaldo',
+            result: result,
+            success: code === 0 && saldo !== null,
+            cliente: cliente,
+            user: null,
+          }).catch(err => this.logger.error('Error logging automation process:', err));
+          
+          if (code === 0 && saldo) {
+            resolve(result);
+          } else {
+            reject(new Error(result.message));
+          }
+        });
+        
+        robotProcess.on('error', (error) => {
+          this.logger.error(`Error ejecutando Robot Framework: ${error.message}`);
+          reject(new Error(`Error ejecutando Robot Framework: ${error.message}`));
+        });
+      });
+      
+    } catch (error) {
+      this.logger.error(`Error en executeDevSaldo: ${error.message}`);
+      throw new Error(`Error ejecutando devsaldo.robot: ${error.message}`);
     }
   }
 }

@@ -266,6 +266,30 @@ export class AutomationController {
       };
     }
   }
+
+  @Get('devsaldo/:clienteId')
+  @Auth()
+  async executeDevSaldo(@Param('clienteId') clienteId: string) {
+    try {
+      this.logger.log(`Ejecutando devsaldo.robot para cliente: ${clienteId}`);
+      const result = await this.automationService.executeDevSaldo(clienteId);
+      
+      return {
+        success: result.success,
+        saldo: result.saldo,
+        deviceId: result.deviceId,
+        deviceInfo: result.deviceInfo,
+        message: result.message || 'DevSaldo ejecutado exitosamente',
+      };
+      
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        message: 'Error ejecutando devsaldo',
+      };
+    }
+  }
 }
 
 
