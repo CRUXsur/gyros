@@ -30,6 +30,16 @@ export class Prestamo {
      })
      plazo_meses: number;
 
+    @Column('float',{
+      default: 0
+     })
+     total_a_pagar: number;
+
+    @Column('float',{
+      default: 0
+     })
+     total_interes: number;
+
     @Column()
      fecha_prestamo: Date;
 

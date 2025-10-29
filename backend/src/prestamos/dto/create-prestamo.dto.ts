@@ -26,6 +26,16 @@ export class CreatePrestamoDto {
     @IsOptional()
     plazo_meses?: number;
 
+    @IsNumber()
+    @IsPositive()
+    @IsOptional()
+    total_a_pagar?: number;
+
+    @IsNumber()
+    @IsPositive()
+    @IsOptional()
+    total_interes?: number;
+
     @IsDate()
     @Type(() => Date)
     @IsOptional()
