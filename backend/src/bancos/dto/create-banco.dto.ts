@@ -14,6 +14,10 @@ export class CreateBancoDto {
     nombre: string;
 
     @IsString()
+    @IsOptional()
+    nickname?: string;
+
+    @IsString()
     @MinLength(1)
     moneda: string;
 

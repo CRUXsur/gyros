@@ -22,6 +22,11 @@ export class BancoCliente {
     @Column('text')
     nombre: string;
 
+    @Column('text', {
+        nullable: true,
+    })
+    nickname: string;
+
     @Column('text')
     moneda: string;
 

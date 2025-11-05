@@ -14,6 +14,9 @@ export class Banco {
     @Column('text')
     nombre: string;
 
+    @Column('text', { nullable: true })
+    nickname: string;
+
     @Column('text')
     moneda: string;
 
