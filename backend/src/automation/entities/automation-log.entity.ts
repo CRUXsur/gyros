@@ -32,7 +32,7 @@ import {
     @Column('text', { nullable: true })
     notes?: string;
   
-  @ManyToOne(() => Cliente, { nullable: true, eager: true })
+  @ManyToOne(() => Cliente, { nullable: true, eager: true, onDelete: 'SET NULL' })
   @JoinColumn()
   cliente?: Cliente;
 
