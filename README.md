@@ -23,55 +23,13 @@
 
   <p align="center"> <a href="http://quanticasoft.org" target="_blank">Gyros</a> Gestion Financiera Logistica.</p>
 
-## Gyros API
-
-1. Clonar proyecto
-2. ```yarn install```
-3. ```yarn build```
-4. Clonar el archivo ```.env.template``` y renombrarlo a ```.env```
-5. Cambiar las variables de entorno
-6. Levantar la base de datos
-    ```
-    docker-compose up -d
-    ```
-7. levantar ``` yarn start:dev ```    
-
-## Robot
-```python test_device_detection.py```
-
-```robot Test/Device_Detection_Test.robot```
-
-```robot Test/Add_Note_Test.robot```
-
-```python3 test_device_detection.py```
-
-```robot -v usuario:3136202m -v password:Andres2013. -v bs:1 -v glosa:25092025 giro.robot```
 
 
-## Endpoints
-```✅ GET /api/automation/status ```
-```✅ GET /api/automation/check-device-id ```
-```✅ POST /api/automation/start-process ```
-```✅ GET /api/automation/history ```
-```✅ POST /api/automation/trigger-scheduled-check ```
-
-
-## Robot - Automatizacion Python
-
-1. Levantar Appium
-    ```
-    start Appium 
-    ```
-
-2. Levantar script
-   ```    
-   robot -d Report Test/Add_Note_Test.robot 
-   ```
 
 
 ## 
 
-<p align="center"> Powerded by: <a href="http://quanticasoft.org" target="_blank">QUANTICASoft</a> </p>
+<p align="center"> Powerded by: <a href="http://quanticasoft.com" target="_blank">QUANTICASoft</a> </p>
 
 
 
