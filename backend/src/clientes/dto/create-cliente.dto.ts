@@ -58,6 +58,7 @@ export class CreateClienteDto {
 
     @IsString()
     @IsIn(['Bolivianos', 'Dolares'])
+    @IsOptional()
     moneda?: string;
 
     @IsString()

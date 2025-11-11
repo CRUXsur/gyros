@@ -54,17 +54,19 @@ export class Cliente {
     codigo: string;
 
     @Column('text',{
+        nullable: false,
         default: 'no_especificado'
     })
     banco: string;
 
     @Column('text',{
-        unique: true,
+        unique: false,
         default: 'no_especificado'
     })
     numero_cuenta: string;
 
     @Column('text',{
+        nullable: false,
         default: 'Bolivianos'
     })
     moneda: string;
