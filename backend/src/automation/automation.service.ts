@@ -266,112 +266,112 @@ export class AutomationService {
   async hourlyDeviceCheck() {
     this.logger.log('🕐 Ejecutando verificación automática por hora...');
     
-    try {
-      // Verificar si hay dispositivos conectados
-      const deviceId = await this.pythonExecutorService.executeDeviceDetection();
+    // try {
+    //   // Verificar si hay dispositivos conectados
+    //   const deviceId = await this.pythonExecutorService.executeDeviceDetection();
       
-      if (deviceId) {
-        // Validar cliente automáticamente
-        const validation = await this.validateClienteDevice(deviceId);
+    //   if (deviceId) {
+    //     // Validar cliente automáticamente
+    //     const validation = await this.validateClienteDevice(deviceId);
         
-        if (validation.isValid && validation.hasActiveLoans) {
-          this.logger.log(`📱 Cliente detectado automáticamente: ${validation.cliente?.nombrecompleto} con ${validation.activeLoans.length} préstamo(s) activo(s)`);
+    //     if (validation.isValid && validation.hasActiveLoans) {
+    //       this.logger.log(`📱 Cliente detectado automáticamente: ${validation.cliente?.nombrecompleto} con ${validation.activeLoans.length} préstamo(s) activo(s)`);
           
-          // Log de detección automática
-          await this.logAutomationProcess({
-            deviceId,
-            action: 'hourly_device_check',
-            result: {
-              cliente: validation.cliente,
-              activeLoans: validation.activeLoans.length,
-              timestamp: new Date(),
-            },
-            success: true,
-            cliente: validation.cliente,
-            user: null, // Sistema automático
-          });
-        }
-      }
-    } catch (error) {
-      this.logger.warn(`⚠️ Verificación automática falló: ${error.message}`);
-    }
+    //       // Log de detección automática
+    //       await this.logAutomationProcess({
+    //         deviceId,
+    //         action: 'hourly_device_check',
+    //         result: {
+    //           cliente: validation.cliente,
+    //           activeLoans: validation.activeLoans.length,
+    //           timestamp: new Date(),
+    //         },
+    //         success: true,
+    //         cliente: validation.cliente,
+    //         user: null, // Sistema automático
+    //       });
+    //     }
+    //   }
+    // } catch (error) {
+    //   this.logger.warn(`⚠️ Verificación automática falló: ${error.message}`);
+    // }
   }
 
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT) // Todos los días a medianoche
   async dailyReportGeneration() {
     this.logger.log('🌙 Generando reporte diario de automatización...');
     
-    try {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
+    // try {
+    //   const today = new Date();
+    //   today.setHours(0, 0, 0, 0);
       
-      const todayLogs = await this.automationLogRepository.find({
-        where: {
-          timestamp: today,
-        },
-        relations: ['cliente', 'user'],
-      });
+    //   const todayLogs = await this.automationLogRepository.find({
+    //     where: {
+    //       timestamp: today,
+    //     },
+    //     relations: ['cliente', 'user'],
+    //   });
 
-      const report = {
-        date: today.toISOString().split('T')[0],
-        totalProcesses: todayLogs.length,
-        successfulProcesses: todayLogs.filter(log => log.success).length,
-        failedProcesses: todayLogs.filter(log => !log.success).length,
-        uniqueDevices: [...new Set(todayLogs.map(log => log.deviceId))].length,
-        uniqueClientes: [...new Set(todayLogs.filter(log => log.cliente).map(log => log.cliente?.id_cliente))].length,
-      };
+    //   const report = {
+    //     date: today.toISOString().split('T')[0],
+    //     totalProcesses: todayLogs.length,
+    //     successfulProcesses: todayLogs.filter(log => log.success).length,
+    //     failedProcesses: todayLogs.filter(log => !log.success).length,
+    //     uniqueDevices: [...new Set(todayLogs.map(log => log.deviceId))].length,
+    //     uniqueClientes: [...new Set(todayLogs.filter(log => log.cliente).map(log => log.cliente?.id_cliente))].length,
+    //   };
 
-      this.logger.log(`📊 Reporte diario generado: ${JSON.stringify(report, null, 2)}`);
+    //   this.logger.log(`📊 Reporte diario generado: ${JSON.stringify(report, null, 2)}`);
       
-      // Log del reporte
-      await this.logAutomationProcess({
-        deviceId: 'system',
-        action: 'daily_report',
-        result: report,
-        success: true,
-        cliente: null,
-        user: null,
-      });
+    //   // Log del reporte
+    //   await this.logAutomationProcess({
+    //     deviceId: 'system',
+    //     action: 'daily_report',
+    //     result: report,
+    //     success: true,
+    //     cliente: null,
+    //     user: null,
+    //   });
 
-    } catch (error) {
-      this.logger.error(`❌ Error generando reporte diario: ${error.message}`);
-    }
+    // } catch (error) {
+    //   this.logger.error(`❌ Error generando reporte diario: ${error.message}`);
+    // }
   }
 
   @Cron('0 0 1 * *') // Primer día de cada mes a medianoche
   async monthlyMaintenance() {
     this.logger.log('🔧 Ejecutando mantenimiento mensual...');
     
-    try {
-      // Limpiar logs antiguos (mayor a 3 meses)
-      const threeMonthsAgo = new Date();
-      threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+    // try {
+    //   // Limpiar logs antiguos (mayor a 3 meses)
+    //   const threeMonthsAgo = new Date();
+    //   threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
       
-      const deletedLogs = await this.automationLogRepository
-        .createQueryBuilder()
-        .delete()
-        .where('timestamp < :date', { date: threeMonthsAgo })
-        .execute();
+    //   const deletedLogs = await this.automationLogRepository
+    //     .createQueryBuilder()
+    //     .delete()
+    //     .where('timestamp < :date', { date: threeMonthsAgo })
+    //     .execute();
 
-      this.logger.log(`🗑️ Limpieza completada: ${deletedLogs.affected} logs eliminados`);
+    //   this.logger.log(`🗑️ Limpieza completada: ${deletedLogs.affected} logs eliminados`);
       
-      // Log de mantenimiento
-      await this.logAutomationProcess({
-        deviceId: 'system',
-        action: 'monthly_maintenance',
-        result: {
-          deletedLogs: deletedLogs.affected,
-          cleanupDate: threeMonthsAgo,
-          maintenanceDate: new Date(),
-        },
-        success: true,
-        cliente: null,
-        user: null,
-      });
+    //   // Log de mantenimiento
+    //   await this.logAutomationProcess({
+    //     deviceId: 'system',
+    //     action: 'monthly_maintenance',
+    //     result: {
+    //       deletedLogs: deletedLogs.affected,
+    //       cleanupDate: threeMonthsAgo,
+    //       maintenanceDate: new Date(),
+    //     },
+    //     success: true,
+    //     cliente: null,
+    //     user: null,
+    //   });
 
-    } catch (error) {
-      this.logger.error(`❌ Error en mantenimiento mensual: ${error.message}`);
-    }
+    // } catch (error) {
+    //   this.logger.error(`❌ Error en mantenimiento mensual: ${error.message}`);
+    // }
   }
 
   // Método manual para triggers de testing
@@ -695,6 +695,7 @@ export class AutomationService {
   }
 
   /**
+   * ---------------------------------------------------------------------------------------
    * Ejecuta el script transfer.robot con variables personalizadas desde el formulario
    * @param variables Objeto con las variables: usuario, password, bs, glosa
    * @returns Resultado de la ejecución
@@ -860,6 +861,7 @@ export class AutomationService {
   }
 
   /**
+   * -------------------------------------------------------------------------------------------
    * Ejecuta el script devsaldo.robot para consultar el saldo de un cliente
    * @param clienteId ID del cliente del cual consultar el saldo
    * @returns Resultado con el saldo obtenido
